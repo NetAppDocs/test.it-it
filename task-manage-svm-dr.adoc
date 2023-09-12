@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: task-manage-svm-dr.html 
+keywords: storage virtual machine, vserver, svm, storage vm, svm dr, disaster recovery, svm disaster recovery, storage vm dr 
+summary: BlueXP non fornisce alcun supporto di configurazione o orchestrazione per il disaster recovery delle macchine virtuali dello storage. È necessario utilizzare System Manager o la CLI. 
+---
+= Configurare il disaster recovery delle SVM
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+BlueXP non fornisce supporto di setup o orchestrazione per il disaster recovery delle Storage VM (SVM). È necessario utilizzare System Manager o la CLI.
+
+Se configuri la replica SVM di SnapMirror tra due sistemi Cloud Volumes ONTAP, la replica deve essere eseguita tra due sistemi ha Pair o due sistemi a nodo singolo. Non è possibile configurare la replica SVM SnapMirror tra una coppia ha e un sistema a nodo singolo.
+
+Fare riferimento ai seguenti documenti per le istruzioni CLI.
+
+* https://library.netapp.com/ecm/ecm_get_file/ECMLP2839856["Guida rapida alla preparazione del disaster recovery per SVM"^]
+* https://library.netapp.com/ecm/ecm_get_file/ECMLP2839857["Guida di SVM Disaster Recovery Express"^]
+

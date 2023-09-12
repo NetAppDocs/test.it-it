@@ -1,0 +1,375 @@
+---
+sidebar: sidebar 
+permalink: task-updating-ontap-cloud.html 
+keywords: update, updating, upgrading, upgrade, software, downgrade, downgrading, FTP, HTTP, mediator, local image, revert, reverting, downgrading, cloud backup 
+summary: Aggiorna Cloud Volumes ONTAP da BlueXP per accedere alle nuove funzionalità e ai miglioramenti più recenti. Preparare i sistemi Cloud Volumes ONTAP prima di aggiornare il software. 
+---
+= Aggiornare il software Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Aggiorna Cloud Volumes ONTAP da BlueXP per accedere alle nuove funzionalità e ai miglioramenti più recenti. Preparare i sistemi Cloud Volumes ONTAP prima di aggiornare il software.
+
+
+
+== Panoramica sull'aggiornamento
+
+Prima di avviare il processo di aggiornamento di Cloud Volumes ONTAP, tenere presente quanto segue.
+
+
+
+=== Aggiornamento solo da BlueXP
+
+Gli aggiornamenti di Cloud Volumes ONTAP devono essere completati da BlueXP. Non aggiornare Cloud Volumes ONTAP utilizzando Gestione di sistema o l'interfaccia CLI. In questo modo si può influire sulla stabilità del sistema.
+
+
+
+=== Come eseguire l'upgrade
+
+BlueXP offre due modi per aggiornare Cloud Volumes ONTAP:
+
+* Seguendo le notifiche di aggiornamento visualizzate nell'ambiente di lavoro
+* Posizionando l'immagine di aggiornamento in una posizione HTTPS e fornendo a BlueXP l'URL
+
+
+
+
+=== Percorsi di upgrade supportati
+
+La versione di Cloud Volumes ONTAP a cui è possibile eseguire l'aggiornamento dipende dalla versione di Cloud Volumes ONTAP attualmente in esecuzione.
+
+[cols="2*"]
+|===
+| Versione corrente | Versioni a cui è possibile eseguire direttamente l'aggiornamento 
+
+
+| 9.13.0 | 9.13.1 
+
+
+.2+| 9.12.1 | 9.13.1 
+
+
+| 9.13.0 
+
+
+| 9.12.0 | 9.12.1 
+
+
+.2+| 9.11.1 | 9.12.1 
+
+
+| 9.12.0 
+
+
+| 9.11.0 | 9.11.1 
+
+
+.2+| 9.10.1 | 9.11.1 
+
+
+| 9.11.0 
+
+
+| 9.10.0 | 9.10.1 
+
+
+.2+| 9.9.1 | 9.10.1 
+
+
+| 9.10.0 
+
+
+| 9.9.0 | 9.9.1 
+
+
+| 9,8 | 9.9.1 
+
+
+| 9,7 | 9,8 
+
+
+| 9,6 | 9,7 
+
+
+| 9,5 | 9,6 
+
+
+| 9,4 | 9,5 
+
+
+| 9,3 | 9,4 
+
+
+| 9.2 | 9,3 
+
+
+| 9,1 | 9.2 
+
+
+| 9,0 | 9,1 
+
+
+| 8,3 | 9,0 
+|===
+Tenere presente quanto segue:
+
+* I percorsi di aggiornamento supportati per Cloud Volumes ONTAP sono diversi da quelli per un cluster ONTAP on-premise.
+* Se si esegue l'aggiornamento seguendo le notifiche di aggiornamento visualizzate in un ambiente di lavoro, BlueXP richiederà di eseguire l'aggiornamento a una release che segue questi percorsi di aggiornamento supportati.
+* Se si esegue l'aggiornamento posizionando un'immagine di aggiornamento in una posizione HTTPS, assicurarsi di seguire questi percorsi di aggiornamento supportati.
+* In alcuni casi, potrebbe essere necessario eseguire l'aggiornamento alcune volte per raggiungere la release di destinazione.
++
+Ad esempio, se si utilizza la versione 9.8 e si desidera eseguire l'aggiornamento alla versione 9.10.1, è necessario prima eseguire l'aggiornamento alla versione 9.9.1 e poi alla versione 9.10.1.
+
+* Per le release di patch (P), è possibile eseguire l'aggiornamento da una release di versione a qualsiasi P-release della versione successiva.
++
+Ecco alcuni esempi:
+
++
+** 9.13.0 > 9.13.1P15
+** 9.12.1 > 9.13.1P2
+
+
+
+
+
+
+=== Ripristino o downgrade
+
+Il ripristino o il downgrade di Cloud Volumes ONTAP a una release precedente non è supportato.
+
+
+
+=== Registrazione del supporto
+
+Cloud Volumes ONTAP deve essere registrato presso il supporto NetApp per poter aggiornare il software utilizzando uno dei metodi descritti in questa pagina. Ciò vale sia PER PAYGO che per BYOL. È necessario link:task-registering.html["Registrare manualmente i sistemi PAYGO"], Mentre i sistemi BYOL sono registrati per impostazione predefinita.
+
+
+TIP: Un sistema che non è registrato per il supporto riceverà comunque le notifiche di aggiornamento software che vengono visualizzate in BlueXP quando è disponibile una nuova versione. Tuttavia, è necessario registrare il sistema prima di poter aggiornare il software.
+
+
+
+=== Aggiornamenti del mediatore ha
+
+BlueXP aggiorna inoltre l'istanza del mediatore secondo necessità durante il processo di aggiornamento di Cloud Volumes ONTAP.
+
+
+
+== Preparatevi all'aggiornamento
+
+Prima di eseguire un aggiornamento, è necessario verificare che i sistemi siano pronti e apportare le modifiche necessarie alla configurazione.
+
+* <<Pianificare il downtime>>
+* <<Verificare che il giveback automatico sia ancora attivato>>
+* <<Sospendere i trasferimenti SnapMirror>>
+* <<Verificare che gli aggregati siano online>>
+
+
+
+
+=== Pianificare il downtime
+
+Quando si aggiorna un sistema a nodo singolo, il processo di aggiornamento porta il sistema offline per un massimo di 25 minuti, durante i quali l'i/o viene interrotto.
+
+In molti casi, l'aggiornamento di una coppia ha è senza interruzioni e l'i/o è ininterrotto. Durante questo processo di aggiornamento senza interruzioni, ogni nodo viene aggiornato in tandem per continuare a fornire i/o ai client.
+
+I protocolli orientati alla sessione potrebbero causare effetti negativi su client e applicazioni in determinate aree durante gli aggiornamenti. Per ulteriori informazioni, https://docs.netapp.com/us-en/ontap/upgrade/concept_considerations_for_session_oriented_protocols.html["Fare riferimento alla documentazione di ONTAP"^]
+
+
+
+=== Verificare che il giveback automatico sia ancora attivato
+
+Il giveback automatico deve essere attivato su una coppia Cloud Volumes ONTAP ha (impostazione predefinita). In caso contrario, l'operazione avrà esito negativo.
+
+http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-hacg/GUID-3F50DE15-0D01-49A5-BEFD-D529713EC1FA.html["Documentazione di ONTAP 9: Comandi per la configurazione del giveback automatico"^]
+
+
+
+=== Sospendere i trasferimenti SnapMirror
+
+Se un sistema Cloud Volumes ONTAP dispone di relazioni SnapMirror attive, si consiglia di sospendere i trasferimenti prima di aggiornare il software Cloud Volumes ONTAP. La sospensione dei trasferimenti impedisce gli errori di SnapMirror. È necessario sospendere i trasferimenti dal sistema di destinazione.
+
+
+NOTE: Anche se il backup e ripristino di BlueXP utilizza un'implementazione di SnapMirror per creare file di backup (chiamata SnapMirror Cloud), non è necessario sospendere i backup quando viene aggiornato un sistema.
+
+.A proposito di questa attività
+Questa procedura descrive come utilizzare System Manager per la versione 9.3 e successive.
+
+.Fasi
+. Accedere a System Manager dal sistema di destinazione.
++
+È possibile accedere a System Manager puntando il browser Web all'indirizzo IP della LIF di gestione del cluster. L'indirizzo IP è disponibile nell'ambiente di lavoro Cloud Volumes ONTAP.
+
++
+
+NOTE: Il computer da cui si accede a BlueXP deve disporre di una connessione di rete a Cloud Volumes ONTAP. Ad esempio, potrebbe essere necessario effettuare l'accesso a BlueXP da un host jump presente nella rete del provider di servizi cloud.
+
+. Fare clic su *protezione > Relazioni*.
+. Selezionare la relazione e fare clic su *operazioni > Quiesce*.
+
+
+
+
+=== Verificare che gli aggregati siano online
+
+Gli aggregati per Cloud Volumes ONTAP devono essere online prima di aggiornare il software. Gli aggregati devono essere online nella maggior parte delle configurazioni, ma in caso contrario, è necessario portarli online.
+
+.A proposito di questa attività
+Questa procedura descrive come utilizzare System Manager per la versione 9.3 e successive.
+
+.Fasi
+. Nell'ambiente di lavoro, fare clic sulla scheda *aggregati*.
+. Sotto il titolo dell'aggregato, fare clic sul pulsante ellisse, quindi selezionare *Visualizza dettagli dell'aggregato*.
++
+image:screenshots_aggregate_details_state.png["Schermata: Mostra il campo Stato quando si visualizzano le informazioni per un aggregato."]
+
+. Se l'aggregato non è in linea, utilizzare System Manager per portare l'aggregato online:
++
+.. Fare clic su *Storage > Aggregates & Disks > Aggregates*.
+.. Selezionare l'aggregato, quindi fare clic su *altre azioni > Stato > Online*.
+
+
+
+
+
+
+== Aggiornare Cloud Volumes ONTAP
+
+BlueXP informa l'utente quando è disponibile una nuova versione per l'aggiornamento. È possibile avviare il processo di aggiornamento da questa notifica. Per ulteriori informazioni, vedere <<Aggiornamento dalle notifiche BlueXP>>.
+
+Un altro metodo per eseguire aggiornamenti software utilizzando un'immagine su un URL esterno. Questa opzione è utile se BlueXP non riesce ad accedere al bucket S3 per aggiornare il software o se è stata fornita una patch. Per ulteriori informazioni, vedere <<Aggiornamento da un'immagine disponibile su un URL>>.
+
+
+
+=== Aggiornamento dalle notifiche BlueXP
+
+BlueXP visualizza una notifica negli ambienti di lavoro Cloud Volumes ONTAP quando è disponibile una nuova versione di Cloud Volumes ONTAP:
+
+image:screenshot_overview_upgrade.png["Schermata: Mostra la notifica Nuova versione disponibile che viene visualizzata nella pagina Canvas dopo aver selezionato un ambiente di lavoro."]
+
+È possibile avviare il processo di aggiornamento da questa notifica, che automatizza il processo ottenendo l'immagine software da un bucket S3, installando l'immagine e riavviando il sistema.
+
+.Prima di iniziare
+Le operazioni BlueXP, come la creazione di volumi o aggregati, non devono essere in corso sul sistema Cloud Volumes ONTAP.
+
+.Fasi
+. Dal menu di navigazione a sinistra, selezionare *Storage > Canvas*.
+. Selezionare un ambiente di lavoro.
++
+Se è disponibile una nuova versione, nella scheda Panoramica viene visualizzata una notifica:
+
++
+image:screenshot_overview_upgrade.png["Una schermata che mostra l'opzione \"Upgrade now!\" (Aggiorna ora!) Sotto la scheda Panoramica."]
+
+. Se è disponibile una nuova versione, fare clic su *Aggiorna ora!*
++
+
+NOTE: Prima di poter aggiornare Cloud Volumes ONTAP tramite la notifica BlueXP, è necessario disporre di un account per il sito di supporto NetApp.
+
+. Nella pagina Upgrade Cloud Volumes ONTAP (Contratto di licenza con l'utente finale), leggere l'EULA, quindi selezionare *i Read and Approve the EULA* (Leggi e approva l'EULA).
+. Fare clic su *Upgrade* (Aggiorna).
++
+
+NOTE: Per impostazione predefinita, la pagina Upgrade Cloud Volumes ONTAP (aggiornamento versione Cloud Volumes ONTAP) seleziona l'ultima versione disponibile per l'aggiornamento. Se disponibili, è possibile selezionare le versioni precedenti di Cloud Volumes ONTAP per l'aggiornamento facendo clic su *Seleziona versioni precedenti*.
+Fare riferimento a. https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/task-updating-ontap-cloud.html#supported-upgrade-paths["Elenco dei percorsi di upgrade supportati"^] Per il percorso di aggiornamento appropriato in base alla versione corrente di Cloud Volumes ONTAP.
+
++
+image:screenshot_upgrade_select_versions.png["Schermata della pagina della versione di Upgrade Cloud Volumes ONTAP."]
+
+. Per verificare lo stato dell'aggiornamento, fare clic sull'icona Impostazioni e selezionare *Timeline*.
+
+
+.Risultato
+BlueXP avvia l'aggiornamento del software. Una volta completato l'aggiornamento del software, è possibile eseguire azioni sull'ambiente di lavoro.
+
+.Al termine
+Se sono state sospese le trasferte SnapMirror, utilizzare System Manager per riprendere le trasferte.
+
+
+
+=== Aggiornamento da un'immagine disponibile su un URL
+
+È possibile posizionare l'immagine del software Cloud Volumes ONTAP sul connettore o su un server HTTP e avviare l'aggiornamento del software da BlueXP. È possibile utilizzare questa opzione se BlueXP non riesce ad accedere al bucket S3 per aggiornare il software.
+
+.Prima di iniziare
+* Le operazioni BlueXP, come la creazione di volumi o aggregati, non devono essere in corso sul sistema Cloud Volumes ONTAP.
+* Se si utilizza HTTPS per ospitare immagini ONTAP, l'aggiornamento potrebbe non riuscire a causa di problemi di autenticazione SSL, causati dalla mancanza di certificati. La soluzione è generare e installare un certificato firmato dalla CA da utilizzare per l'autenticazione tra ONTAP e BlueXP.
++
+Consulta la Knowledge base di NetApp per visualizzare istruzioni dettagliate:
+
++
+https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services/Cloud_Manager/How_to_configure_Cloud_Manager_as_an_HTTPS_server_to_host_upgrade_images["KB di NetApp: Come configurare BlueXP come server HTTPS per ospitare le immagini di aggiornamento"^]
+
+
+
+.Fasi
+. Facoltativo: Configurare un server HTTP in grado di ospitare l'immagine del software Cloud Volumes ONTAP.
++
+Se si dispone di una connessione VPN alla rete virtuale, è possibile posizionare l'immagine del software Cloud Volumes ONTAP su un server HTTP nella propria rete. In caso contrario, è necessario posizionare il file su un server HTTP nel cloud.
+
+. Se si utilizza il proprio gruppo di protezione per Cloud Volumes ONTAP, assicurarsi che le regole in uscita consentano connessioni HTTP in modo che Cloud Volumes ONTAP possa accedere all'immagine software.
++
+
+NOTE: Per impostazione predefinita, il gruppo di protezione Cloud Volumes ONTAP predefinito consente le connessioni HTTP in uscita.
+
+. Ottenere l'immagine software da https://mysupport.netapp.com/site/products/all/details/cloud-volumes-ontap/downloads-tab["Il sito di supporto NetApp"^].
+. Copiare l'immagine del software in una directory sul connettore o su un server HTTP da cui verrà fornito il file.
++
+Sono disponibili due percorsi. Il percorso corretto dipende dalla versione del connettore.
+
++
+** `/opt/application/netapp/cloudmanager/docker_occm/data/ontap/images/`
+** `/opt/application/netapp/cloudmanager/ontap/images/`
+
+
+. Dall'ambiente di lavoro in BlueXP, fare clic sul pulsante *... (Icona ellisse)*, quindi fare clic su *Aggiorna Cloud Volumes ONTAP*.
+. Nella pagina Aggiorna versione Cloud Volumes ONTAP, immettere l'URL, quindi fare clic su *Cambia immagine*.
++
+Se l'immagine software è stata copiata nel connettore nel percorso indicato sopra, immettere il seguente URL:
+
++
+\Http://<Connector-private-IP-address>/ontap/images/<image-file-name>
+
++
+
+NOTE: Nell'URL, *nome-file-immagine* deve seguire il formato "cot.image.9.13.1P2.tgz".
+
+. Fare clic su *Procedi* per confermare.
+
+
+.Risultato
+BlueXP avvia l'aggiornamento software. Una volta completato l'aggiornamento del software, è possibile eseguire azioni sull'ambiente di lavoro.
+
+.Al termine
+Se sono state sospese le trasferte SnapMirror, utilizzare System Manager per riprendere le trasferte.
+
+ifdef::gcp[]
+
+
+
+== Correggere gli errori di download quando si utilizza un gateway NAT Google Cloud
+
+Il connettore scarica automaticamente gli aggiornamenti software per Cloud Volumes ONTAP. Il download potrebbe non riuscire se la configurazione utilizza un gateway Google Cloud NAT. È possibile correggere questo problema limitando il numero di parti in cui è divisa l'immagine software. Questa fase deve essere completata utilizzando l'API BlueXP.
+
+.Fase
+. Inviare una richiesta PUT a /occm/config con il seguente JSON come corpo:
+
+
+[source]
+----
+{
+  "maxDownloadSessions": 32
+}
+----
+Il valore per _maxDownloadSessions_ può essere 1 o qualsiasi numero intero maggiore di 1. Se il valore è 1, l'immagine scaricata non verrà divisa.
+
+Si noti che 32 è un valore di esempio. Il valore da utilizzare dipende dalla configurazione NAT e dal numero di sessioni che è possibile avere contemporaneamente.
+
+https://docs.netapp.com/us-en/bluexp-automation/cm/api_ref_resources.html#occmconfig["Scopri di più sulla chiamata API /occm/config"^].
+
+endif::gcp[]

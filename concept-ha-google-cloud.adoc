@@ -1,0 +1,154 @@
+---
+sidebar: sidebar 
+permalink: concept-ha-google-cloud.html 
+keywords: high availability, HA, mediator, concepts, understanding, overview, takeover, giveback, rpo, rto, nondisruptive, ha pairs, node, nodes, synchronous, resync, recovery point objective, recovery time objective, failover, mount, remount, failure, data access, access, ip address, performance, gcp, gcp ha, google cloud ha, ha in google cloud 
+summary: Una configurazione ad alta disponibilità di Cloud Volumes ONTAP offre operazioni senza interruzioni e tolleranza agli errori. In Google Cloud, i dati vengono sottoposti a mirroring sincrono tra i due nodi. 
+---
+= Coppie ad alta disponibilità in Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Una configurazione Cloud Volumes ONTAP ad alta disponibilità (ha) offre operazioni senza interruzioni e tolleranza agli errori. In Google Cloud, i dati vengono sottoposti a mirroring sincrono tra i due nodi.
+
+
+
+== Componenti HA
+
+Le configurazioni Cloud Volumes ONTAP ha in Google Cloud includono i seguenti componenti:
+
+* Due nodi Cloud Volumes ONTAP i cui dati vengono sottoposti a mirroring sincrono l'uno con l'altro.
+* Istanza di mediatore che fornisce un canale di comunicazione tra i nodi per assistere nei processi di acquisizione e giveback dello storage.
+* Una o tre zone (consigliato).
++
+Se si sceglie tre zone, i due nodi e il mediatore si trovano in zone Google Cloud separate.
+
+* Quattro Virtual Private Clouds (VPC).
++
+La configurazione utilizza quattro VPC perché GCP richiede che ogni interfaccia di rete risieda in una rete VPC separata.
+
+* Quattro bilanciatori di carico interni di Google Cloud (TCP/UDP) che gestiscono il traffico in entrata verso la coppia Cloud Volumes ONTAP ha.
+
+
+link:reference-networking-gcp.html["Scopri i requisiti di rete"], Tra cui ulteriori dettagli su bilanciamento del carico, VPC, indirizzi IP interni, subnet e altro ancora.
+
+La seguente immagine concettuale mostra una coppia Cloud Volumes ONTAP ha e i suoi componenti:
+
+image:diagram_gcp_ha.png["Immagine concettuale di una coppia Cloud Volumes ONTAP ha e dei suoi componenti."]
+
+
+
+=== Mediatore
+
+Di seguito sono riportati alcuni dettagli chiave sull'istanza di mediatore in Google Cloud:
+
+Tipo di istanza:: e2-micro (in precedenza era stata utilizzata un'istanza f1-micro)
+Dischi:: Due dischi persistenti standard da 10 GiB ciascuno
+Sistema operativo:: Debian 11
++
+--
+
+NOTE: Per Cloud Volumes ONTAP 9.10.0 e versioni precedenti, Debian 10 è stata installata sul mediatore.
+
+--
+Aggiornamenti:: Quando si aggiorna Cloud Volumes ONTAP, BlueXP aggiorna anche l'istanza del mediatore in base alle necessità.
+Accesso all'istanza:: Per Debian, l'utente cloud predefinito è `admin`. Google Cloud crea e aggiunge certificati per `admin` Utente quando viene richiesto l'accesso SSH tramite la console Google Cloud o la riga di comando gcloud. È possibile specificare `sudo` per ottenere i privilegi di root.
+Agenti di terze parti:: Gli agenti di terze parti o le estensioni delle macchine virtuali non sono supportati sull'istanza del mediatore.
+
+
+
+
+== Takeover e giveback dello storage
+
+Se un nodo non funziona, l'altro nodo può servire i dati per il proprio partner per fornire un servizio dati continuo. I client possono accedere agli stessi dati dal nodo partner perché i dati sono stati sottoposti a mirroring sincrono con il partner.
+
+Dopo il riavvio del nodo, il partner deve risincronizzare i dati prima di poter restituire lo storage. Il tempo necessario per la risincronizzazione dei dati dipende dalla quantità di dati modificati mentre il nodo era inattivo.
+
+Per impostazione predefinita, le funzioni di Takeover, risync e giveback dello storage sono tutte automatiche. Non è richiesta alcuna azione da parte dell'utente.
+
+
+
+== RPO e RTO
+
+Una configurazione ad alta disponibilità dei dati viene mantenuta come segue:
+
+* L'obiettivo del punto di ripristino (RPO) è di 0 secondi.
++
+I tuoi dati sono coerenti con le transazioni senza alcuna perdita di dati.
+
+* Il recovery time objective (RTO) è di 120 secondi.
++
+In caso di interruzione, i dati devono essere disponibili entro 120 secondi al massimo.
+
+
+
+
+
+== Modelli di implementazione HA
+
+È possibile garantire l'elevata disponibilità dei dati implementando una configurazione ha in più zone o in una singola zona.
+
+Zone multiple (consigliato):: L'implementazione di una configurazione ha in tre zone garantisce la disponibilità continua dei dati in caso di guasto all'interno di una zona. Si noti che le prestazioni di scrittura sono leggermente inferiori rispetto all'utilizzo di una singola zona, ma sono minime.
+Zona singola:: Quando viene implementato in una singola zona, una configurazione Cloud Volumes ONTAP ha utilizza una policy di posizionamento distribuita. Questa policy garantisce che una configurazione ha sia protetta da un singolo punto di guasto all'interno della zona, senza dover utilizzare zone separate per ottenere l'isolamento degli errori.
++
+--
+Questo modello di implementazione riduce i costi perché non sono previsti costi di uscita dei dati tra le zone.
+
+--
+
+
+
+
+== Come funziona lo storage in una coppia ha
+
+A differenza di un cluster ONTAP, lo storage in una coppia Cloud Volumes ONTAP ha in GCP non viene condiviso tra i nodi. I dati vengono invece sottoposti a mirroring sincrono tra i nodi in modo che siano disponibili in caso di guasto.
+
+
+
+=== Allocazione dello storage
+
+Quando si crea un nuovo volume e sono necessari dischi aggiuntivi, BlueXP assegna lo stesso numero di dischi a entrambi i nodi, crea un aggregato mirrorato e crea il nuovo volume. Ad esempio, se sono necessari due dischi per il volume, BlueXP assegna due dischi per nodo per un totale di quattro dischi.
+
+
+
+=== Configurazioni dello storage
+
+È possibile utilizzare una coppia ha come configurazione Active-Active, in cui entrambi i nodi servono i dati ai client, o come configurazione Active-passive, in cui il nodo passivo risponde alle richieste di dati solo se ha assunto lo storage per il nodo attivo.
+
+
+
+=== Aspettative di performance per una configurazione ha
+
+Una configurazione Cloud Volumes ONTAP ha replica in modo sincrono i dati tra i nodi, consumando la larghezza di banda della rete. Di conseguenza, rispetto a una configurazione Cloud Volumes ONTAP a nodo singolo, è possibile aspettarsi le seguenti performance:
+
+* Per le configurazioni ha che servono dati da un solo nodo, le prestazioni di lettura sono paragonabili alle prestazioni di lettura di una configurazione a nodo singolo, mentre le prestazioni di scrittura sono inferiori.
+* Per le configurazioni ha che servono dati da entrambi i nodi, le performance di lettura sono superiori rispetto alle performance di lettura di una configurazione a nodo singolo e le performance di scrittura sono uguali o superiori.
+
+
+Per ulteriori informazioni sulle prestazioni di Cloud Volumes ONTAP, vedere link:concept-performance.html["Performance"].
+
+
+
+=== Accesso client allo storage
+
+I client devono accedere ai volumi NFS e CIFS utilizzando l'indirizzo IP dei dati del nodo su cui risiede il volume. Se i client NAS accedono a un volume utilizzando l'indirizzo IP del nodo partner, il traffico passa tra entrambi i nodi, riducendo le performance.
+
+
+TIP: Se si sposta un volume tra nodi in una coppia ha, è necessario rimontarlo utilizzando l'indirizzo IP dell'altro nodo. In caso contrario, si possono ottenere prestazioni ridotte. Se i client supportano i riferimenti NFSv4 o il reindirizzamento delle cartelle per CIFS, è possibile attivare tali funzionalità sui sistemi Cloud Volumes ONTAP per evitare di rimontare il volume. Per ulteriori informazioni, consultare la documentazione di ONTAP.
+
+È possibile identificare facilmente l'indirizzo IP corretto tramite l'opzione _Mount Command_ nel pannello Manage Volumes (Gestisci volumi) di BlueXP.
+
+image::screenshot_mount_option.png[400]
+
+
+
+=== Link correlati
+
+* link:reference-networking-gcp.html["Scopri i requisiti di rete"]
+* link:task-getting-started-gcp.html["Scopri come iniziare a utilizzare GCP"]
+

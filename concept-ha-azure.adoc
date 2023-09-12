@@ -1,0 +1,115 @@
+---
+sidebar: sidebar 
+permalink: concept-ha-azure.html 
+keywords: high availability, HA, concepts, understanding, overview, takeover, giveback, rpo, rto, nondisruptive, ha pairs, node, nodes, recovery point objective, recovery time objective, nas, nfs, cifs, iscsi, mpio, alua, failover, failure, azure, shared storage, active, passive, load balancer, availability set, storage accounts, page blobs 
+summary: 'Una coppia Cloud Volumes ONTAP ad alta disponibilità (ha) offre affidabilità aziendale e operazioni continue in caso di guasti nel tuo ambiente cloud. In Azure, lo storage viene condiviso tra i due nodi.' 
+---
+= Coppie ad alta disponibilità in Azure
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Una coppia Cloud Volumes ONTAP ad alta disponibilità (ha) offre affidabilità aziendale e operazioni continue in caso di guasti nel tuo ambiente cloud. In Azure, lo storage viene condiviso tra i due nodi.
+
+
+
+== Componenti HA
+
+
+
+=== HA configurazione di una singola zona di disponibilità con blob di pagina
+
+La configurazione di un blob di pagina Cloud Volumes ONTAP ha in Azure include i seguenti componenti:
+
+image:diagram_ha_azure.png["Un'immagine concettuale che mostra un bilanciamento del carico che gestisce il traffico in entrata da BlueXP e client, due nodi Cloud Volumes ONTAP in un set di disponibilità, dischi SSD per i dati di avvio e Page Blob per i dati del cliente."]
+
+Tenere presente quanto segue sui componenti di Azure che BlueXP implementa per te:
+
+Bilanciamento del carico standard Azure:: Il bilanciamento del carico gestisce il traffico in entrata verso la coppia Cloud Volumes ONTAP ha.
+Set di disponibilità:: Il set di disponibilità Azure è un raggruppamento logico dei nodi Cloud Volumes ONTAP. Il set di disponibilità garantisce che i nodi si trovino in diversi domini di errore e di aggiornamento per fornire ridondanza e disponibilità. https://docs.microsoft.com/en-us/azure/virtual-machines/availability-set-overview["Scopri di più sui set di disponibilità nei documenti di Azure"^].
+Dischi:: I dati dei clienti si trovano nelle pagine di Premium Storage. Ogni nodo ha accesso allo storage dell'altro nodo. È inoltre richiesto storage aggiuntivo per link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/reference-default-configs.html#azure-ha-pair["dati di boot, root e core"^].
+Account storage::
++
+--
+* Per i dischi gestiti è necessario un account di storage.
+* Per le pagine blob dello storage Premium sono necessari uno o più account di storage, in quanto viene raggiunto il limite di capacità del disco per account di storage.
++
+https://docs.microsoft.com/en-us/azure/storage/common/storage-scalability-targets["Documentazione di Azure: Obiettivi di scalabilità e performance dello storage Azure per gli account storage"^].
+
+* Per il tiering dei dati sullo storage Azure Blob è necessario un account storage.
+* A partire da Cloud Volumes ONTAP 9.7, gli account storage creati da BlueXP per le coppie ha sono account storage v2 generici.
+* Durante la creazione di un ambiente di lavoro, è possibile attivare una connessione HTTPS da una coppia ha di Cloud Volumes ONTAP 9.7 agli account di storage Azure. L'attivazione di questa opzione può influire sulle prestazioni di scrittura. Non è possibile modificare l'impostazione dopo aver creato l'ambiente di lavoro.
+
+
+--
+
+
+
+
+=== Configurazione DI una singola zona di disponibilità HA con dischi gestiti condivisi
+
+La configurazione di una singola zona di disponibilità di Cloud Volumes ONTAP ha eseguita su un disco gestito condiviso include i seguenti componenti:
+
+image:diagram_ha_azure_saz_lrs.png["Immagine concettuale che mostra un bilanciamento del carico che gestisce il traffico in entrata da BlueXP e client, due nodi Cloud Volumes ONTAP in un set di disponibilità, dischi SSD per i dati di avvio e dischi gestiti da LRS per i dati del cliente."]
+
+Tenere presente quanto segue sui componenti di Azure che BlueXP implementa per te:
+
+Bilanciamento del carico standard Azure:: Il bilanciamento del carico gestisce il traffico in entrata verso la coppia Cloud Volumes ONTAP ha.
+Set di disponibilità:: Il set di disponibilità Azure è un raggruppamento logico dei nodi Cloud Volumes ONTAP. Il set di disponibilità garantisce che i nodi si trovino in diversi domini di errore e di aggiornamento per fornire ridondanza e disponibilità. https://docs.microsoft.com/en-us/azure/virtual-machines/availability-set-overview["Scopri di più sui set di disponibilità nei documenti di Azure"^].
+Dischi:: I dati del cliente risiedono su dischi gestiti con storage ridondante locale (LRS). Ogni nodo ha accesso allo storage dell'altro nodo. È inoltre richiesto storage aggiuntivo per link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/reference-default-configs.html#azure-ha-pair["Dati di boot, root, partner root, core e NVRAM"^].
+Account storage:: Gli account storage vengono utilizzati per le implementazioni gestite basate su disco per gestire i log diagnostici e il tiering per lo storage blob.
+
+
+
+
+=== HA configurazione di più zone di disponibilità
+
+La configurazione di una zona di disponibilità multipla Cloud Volumes ONTAP ha in Azure include i seguenti componenti:
+
+image:diagram_ha_azure_maz.png["Immagine concettuale che mostra un bilanciamento del carico che gestisce il traffico in entrata da BlueXP e client, due nodi Cloud Volumes ONTAP in due zone di disponibilità, dischi SSD per i dati di avvio e dischi gestiti per i dati del cliente."]
+
+Tenere presente quanto segue sui componenti di Azure che BlueXP implementa per te:
+
+Bilanciamento del carico standard Azure:: Il bilanciamento del carico gestisce il traffico in entrata verso la coppia Cloud Volumes ONTAP ha.
+Zone di disponibilità:: Due nodi Cloud Volumes ONTAP vengono implementati in diverse zone di disponibilità. Le zone di disponibilità garantiscono che i nodi si trovino in diversi domini di errore. https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#zone-redundant-storage-for-managed-disks["Scopri di più sullo storage ridondante in zone di Azure per dischi gestiti nei documenti di Azure"^].
+Dischi:: I dati del cliente risiedono su dischi gestiti con ZRS (zone-Redundant Storage). Ogni nodo ha accesso allo storage dell'altro nodo. È inoltre richiesto storage aggiuntivo per link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/reference-default-configs.html#azure-ha-pair["dati di boot, root, root partner e core"^].
+Account storage:: Gli account storage vengono utilizzati per le implementazioni gestite basate su disco per gestire i log diagnostici e il tiering per lo storage blob.
+
+
+
+
+== RPO e RTO
+
+Una configurazione ad alta disponibilità dei dati viene mantenuta come segue:
+
+* L'obiettivo del punto di ripristino (RPO) è di 0 secondi.
+I tuoi dati sono coerenti con le transazioni senza alcuna perdita di dati.
+* Il recovery time objective (RTO) è di 120 secondi.
+In caso di interruzione, i dati devono essere disponibili entro 120 secondi al massimo.
+
+
+
+
+== Takeover e giveback dello storage
+
+Analogamente a un cluster ONTAP fisico, lo storage in una coppia Azure ha viene condiviso tra i nodi. Le connessioni allo storage del partner consentono a ciascun nodo di accedere allo storage dell'altro in caso di _takeover_. I meccanismi di failover del percorso di rete garantiscono che client e host continuino a comunicare con il nodo esistente. Il partner _restituisce lo storage quando il nodo viene riportato in linea.
+
+Per le configurazioni NAS, gli indirizzi IP dei dati migrano automaticamente tra i nodi ha in caso di guasti.
+
+Per iSCSI, Cloud Volumes ONTAP utilizza MPIO (Multipath i/o) e ALUA (Asymmetric Logical Unit Access) per gestire il failover del percorso tra i percorsi ottimizzati per attività e non ottimizzati.
+
+
+NOTE: Per informazioni su quali configurazioni host specifiche supportano ALUA, consultare http://mysupport.netapp.com/matrix["Tool di matrice di interoperabilità NetApp"^] E la guida all'installazione e all'installazione delle utility host per il sistema operativo host.
+
+Per impostazione predefinita, le funzioni di Takeover, risync e giveback dello storage sono tutte automatiche. Non è richiesta alcuna azione da parte dell'utente.
+
+
+
+== Configurazioni dello storage
+
+È possibile utilizzare una coppia ha come configurazione Active-Active, in cui entrambi i nodi servono i dati ai client, o come configurazione Active-passive, in cui il nodo passivo risponde alle richieste di dati solo se ha assunto lo storage per il nodo attivo.

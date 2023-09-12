@@ -1,0 +1,198 @@
+---
+sidebar: sidebar 
+permalink: concept-ha.html 
+keywords: high availability, HA, mediator, concepts, understanding, overview, availability zones, AZs, takeover, giveback, rpo, rto, floating ip, nondisruptive, ha pairs, node, nodes, synchronous, resync, recovery point objective, recovery time objective, nas, nfs, cifs, floating ip address, route tables, iscsi, mpio, alua, failover, mount, remount, failure, data access, access, ip address, performance 
+summary: 'Una configurazione Cloud Volumes ONTAP ad alta disponibilità (ha) offre operazioni senza interruzioni e tolleranza agli errori. In AWS, i dati vengono sottoposti a mirroring sincrono tra i due nodi.' 
+---
+= Coppie ad alta disponibilità in AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Una configurazione Cloud Volumes ONTAP ad alta disponibilità (ha) offre operazioni senza interruzioni e tolleranza agli errori. In AWS, i dati vengono sottoposti a mirroring sincrono tra i due nodi.
+
+
+
+== Componenti HA
+
+In AWS, le configurazioni Cloud Volumes ONTAP ha includono i seguenti componenti:
+
+* Due nodi Cloud Volumes ONTAP i cui dati vengono sottoposti a mirroring sincrono l'uno con l'altro.
+* Istanza di mediatore che fornisce un canale di comunicazione tra i nodi per assistere nei processi di acquisizione e giveback dello storage.
+
+
+
+
+=== Mediatore
+
+Di seguito sono riportati alcuni dettagli chiave sull'istanza del mediatore in AWS:
+
+Tipo di istanza:: t2-micro
+Dischi:: Un disco magnetico EBS di circa 8 GiB.
+Sistema operativo:: Debian 11
++
+--
+
+NOTE: Per Cloud Volumes ONTAP 9.10.0 e versioni precedenti, Debian 10 è stata installata sul mediatore.
+
+--
+Aggiornamenti:: Quando si aggiorna Cloud Volumes ONTAP, BlueXP aggiorna anche l'istanza del mediatore in base alle necessità.
+Accesso all'istanza:: Quando si crea una coppia Cloud Volumes ONTAP ha da BlueXP, viene richiesto di fornire una coppia di chiavi per l'istanza del mediatore. È possibile utilizzare tale coppia di chiavi per l'accesso SSH utilizzando `admin` utente.
+Agenti di terze parti:: Gli agenti di terze parti o le estensioni delle macchine virtuali non sono supportati sull'istanza del mediatore.
+
+
+
+
+== Takeover e giveback dello storage
+
+Se un nodo non funziona, l'altro nodo può servire i dati per il proprio partner per fornire un servizio dati continuo. I client possono accedere agli stessi dati dal nodo partner perché i dati sono stati sottoposti a mirroring sincrono con il partner.
+
+Dopo il riavvio del nodo, il partner deve risincronizzare i dati prima di poter restituire lo storage. Il tempo necessario per la risincronizzazione dei dati dipende dalla quantità di dati modificati mentre il nodo era inattivo.
+
+Per impostazione predefinita, le funzioni di Takeover, risync e giveback dello storage sono tutte automatiche. Non è richiesta alcuna azione da parte dell'utente.
+
+
+
+== RPO e RTO
+
+Una configurazione ad alta disponibilità dei dati viene mantenuta come segue:
+
+* L'obiettivo del punto di ripristino (RPO) è di 0 secondi.
+I tuoi dati sono coerenti con le transazioni senza alcuna perdita di dati.
+* Il recovery time objective (RTO) è di 120 secondi.
+In caso di interruzione, i dati devono essere disponibili entro 120 secondi al massimo.
+
+
+
+
+== Modelli di implementazione HA
+
+È possibile garantire l'elevata disponibilità dei dati implementando una configurazione ha in più zone di disponibilità (AZS) o in un singolo AZ. Per scegliere la configurazione più adatta alle proprie esigenze, è necessario esaminare ulteriori dettagli su ciascuna configurazione.
+
+
+
+=== Zone di disponibilità multiple
+
+L'implementazione di una configurazione ha in zone di disponibilità multiple (AZS) garantisce un'elevata disponibilità dei dati in caso di guasto con un'istanza AZ o che esegue un nodo Cloud Volumes ONTAP. È necessario comprendere in che modo gli indirizzi IP NAS influiscono sull'accesso ai dati e sul failover dello storage.
+
+
+
+==== Accesso ai dati NFS e CIFS
+
+Quando una configurazione ha viene distribuita in più zone di disponibilità, _indirizzi IP mobili_ abilitano l'accesso al client NAS. Gli indirizzi IP mobili, che devono essere al di fuori dei blocchi CIDR per tutti i VPC della regione, possono migrare tra i nodi in caso di guasti. Non sono accessibili in modo nativo ai client che si trovano al di fuori del VPC, a meno che non si link:task-setting-up-transit-gateway.html["Configurare un gateway di transito AWS"].
+
+Se non è possibile configurare un gateway di transito, gli indirizzi IP privati sono disponibili per i client NAS esterni al VPC. Tuttavia, questi indirizzi IP sono statici e non possono eseguire il failover tra i nodi.
+
+Prima di implementare una configurazione ha in più zone di disponibilità, è necessario esaminare i requisiti per gli indirizzi IP mobili e le tabelle di routing. È necessario specificare gli indirizzi IP mobili quando si implementa la configurazione. Gli indirizzi IP privati vengono creati automaticamente da BlueXP.
+
+Per ulteriori informazioni, vedere link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/reference-networking-aws.html#requirements-for-ha-pairs-in-multiple-azs["Requisiti di rete AWS per Cloud Volumes ONTAP ha in più AZS"^].
+
+
+
+==== Accesso ai dati iSCSI
+
+La comunicazione dati tra più VPC non è un problema, poiché iSCSI non utilizza indirizzi IP mobili.
+
+
+
+==== Takeover e giveback per iSCSI
+
+Per iSCSI, Cloud Volumes ONTAP utilizza MPIO (Multipath i/o) e ALUA (Asymmetric Logical Unit Access) per gestire il failover del percorso tra i percorsi ottimizzati per attività e non ottimizzati.
+
+
+NOTE: Per informazioni su quali configurazioni host specifiche supportano ALUA, consultare http://mysupport.netapp.com/matrix["Tool di matrice di interoperabilità NetApp"^] E la guida all'installazione e all'installazione delle utility host per il sistema operativo host.
+
+
+
+==== Takeover e giveback per NAS
+
+Quando l'acquisizione avviene in una configurazione NAS utilizzando IP mobili, l'indirizzo IP mobile del nodo utilizzato dai client per accedere ai dati viene spostato nell'altro nodo. L'immagine seguente mostra l'acquisizione dello storage in una configurazione NAS utilizzando IP mobili. Se il nodo 2 non funziona, l'indirizzo IP mobile per il nodo 2 passa al nodo 1.
+
+image:diagram_takeover_giveback.png["Immagine concettuale che mostra l'acquisizione dello storage in una coppia Cloud Volumes ONTAP ha: Gli indirizzi IP mobili dal nodo 1 si spostano nel nodo 2."]
+
+Gli IP dei dati NAS utilizzati per l'accesso VPC esterno non possono migrare tra i nodi in caso di guasti. Se un nodo non è in linea, è necessario rimontarlo manualmente sui client esterni al VPC utilizzando l'indirizzo IP sull'altro nodo.
+
+Una volta che il nodo guasto torna in linea, rimontare i client sui volumi utilizzando l'indirizzo IP originale. Questo passaggio è necessario per evitare il trasferimento di dati non necessari tra due nodi ha, che può causare un impatto significativo sulle performance e sulla stabilità.
+
+È possibile identificare facilmente l'indirizzo IP corretto da BlueXP selezionando il volume e facendo clic su *Mount Command*.
+
+
+
+=== Singola zona di disponibilità
+
+L'implementazione di una configurazione ha in una singola zona di disponibilità (AZ) può garantire un'elevata disponibilità dei dati in caso di guasto di un'istanza che esegue un nodo Cloud Volumes ONTAP. Tutti i dati sono accessibili in modo nativo dall'esterno del VPC.
+
+
+NOTE: BlueXP crea un https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html["Gruppo di posizionamento AWS Spread"^] E lancia i due nodi ha in quel gruppo di posizionamento. Il gruppo di posizionamento riduce il rischio di guasti simultanei distribuendo le istanze su hardware sottostante distinto. Questa funzionalità migliora la ridondanza dal punto di vista del calcolo e non dal punto di vista del guasto del disco.
+
+
+
+==== Accesso ai dati
+
+Poiché questa configurazione si trova in un singolo AZ, non richiede indirizzi IP mobili. È possibile utilizzare lo stesso indirizzo IP per l'accesso ai dati dall'interno del VPC e dall'esterno del VPC.
+
+La seguente immagine mostra una configurazione ha in un singolo AZ. I dati sono accessibili dall'interno del VPC e dall'esterno del VPC.
+
+image:diagram_single_az.png["Immagine concettuale che mostra una configurazione ONTAP ha in una singola zona di disponibilità che consente l'accesso ai dati dall'esterno del VPC."]
+
+
+
+==== Takeover e giveback
+
+Per iSCSI, Cloud Volumes ONTAP utilizza MPIO (Multipath i/o) e ALUA (Asymmetric Logical Unit Access) per gestire il failover del percorso tra i percorsi ottimizzati per attività e non ottimizzati.
+
+
+NOTE: Per informazioni su quali configurazioni host specifiche supportano ALUA, consultare http://mysupport.netapp.com/matrix["Tool di matrice di interoperabilità NetApp"^] E la guida all'installazione e all'installazione delle utility host per il sistema operativo host.
+
+Per le configurazioni NAS, gli indirizzi IP dei dati possono migrare tra i nodi ha in caso di guasti. In questo modo si garantisce l'accesso del client allo storage.
+
+
+
+== Come funziona lo storage in una coppia ha
+
+A differenza di un cluster ONTAP, lo storage in una coppia Cloud Volumes ONTAP ha non viene condiviso tra i nodi. I dati vengono invece sottoposti a mirroring sincrono tra i nodi in modo che siano disponibili in caso di guasto.
+
+
+
+=== Allocazione dello storage
+
+Quando si crea un nuovo volume e sono necessari dischi aggiuntivi, BlueXP assegna lo stesso numero di dischi a entrambi i nodi, crea un aggregato mirrorato e crea il nuovo volume. Ad esempio, se sono necessari due dischi per il volume, BlueXP assegna due dischi per nodo per un totale di quattro dischi.
+
+
+
+=== Configurazioni dello storage
+
+È possibile utilizzare una coppia ha come configurazione Active-Active, in cui entrambi i nodi forniscono dati ai client o come configurazione Active-passive, in cui il nodo passivo risponde alle richieste di dati solo se ha assunto il controllo dello storage per il nodo attivo.
+
+
+NOTE: È possibile impostare una configurazione Active-Active solo quando si utilizza BlueXP nella vista del sistema di storage.
+
+
+
+=== Aspettative di performance
+
+Una configurazione Cloud Volumes ONTAP ha replica in modo sincrono i dati tra i nodi, consumando la larghezza di banda della rete. Di conseguenza, rispetto a una configurazione Cloud Volumes ONTAP a nodo singolo, è possibile aspettarsi le seguenti performance:
+
+* Per le configurazioni ha che servono dati da un solo nodo, le prestazioni di lettura sono paragonabili alle prestazioni di lettura di una configurazione a nodo singolo, mentre le prestazioni di scrittura sono inferiori.
+* Per le configurazioni ha che servono dati da entrambi i nodi, le performance di lettura sono superiori rispetto alle performance di lettura di una configurazione a nodo singolo e le performance di scrittura sono uguali o superiori.
+
+
+Per ulteriori informazioni sulle prestazioni di Cloud Volumes ONTAP, vedere link:concept-performance.html["Performance"].
+
+
+
+=== Accesso client allo storage
+
+I client devono accedere ai volumi NFS e CIFS utilizzando l'indirizzo IP dei dati del nodo su cui risiede il volume. Se i client NAS accedono a un volume utilizzando l'indirizzo IP del nodo partner, il traffico passa tra entrambi i nodi, riducendo le performance.
+
+
+TIP: Se si sposta un volume tra nodi in una coppia ha, è necessario rimontarlo utilizzando l'indirizzo IP dell'altro nodo. In caso contrario, si possono ottenere prestazioni ridotte. Se i client supportano i riferimenti NFSv4 o il reindirizzamento delle cartelle per CIFS, è possibile attivare tali funzionalità sui sistemi Cloud Volumes ONTAP per evitare di rimontare il volume. Per ulteriori informazioni, consultare la documentazione di ONTAP.
+
+È possibile identificare facilmente l'indirizzo IP corretto tramite l'opzione _Mount Command_ nel pannello Manage Volumes (Gestisci volumi) di BlueXP.
+
+image::screenshot_mount_option.png[400]

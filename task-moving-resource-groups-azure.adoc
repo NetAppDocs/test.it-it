@@ -1,0 +1,35 @@
+---
+sidebar: sidebar 
+permalink: task-moving-resource-groups-azure.html 
+keywords: move resource groups, azure, remove working environment, resource groups, azure console, Azure subscriptions 
+summary: Cloud Volumes ONTAP supporta lo spostamento dei gruppi di risorse Azure, ma il flusso di lavoro avviene solo nella console Azure. 
+---
+= Spostamento dei gruppi di risorse
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cloud Volumes ONTAP supporta lo spostamento dei gruppi di risorse Azure, ma il flusso di lavoro avviene solo nella console Azure.
+
+È possibile spostare un ambiente di lavoro da un gruppo di risorse a un gruppo di risorse diverso in Azure all'interno della stessa sottoscrizione Azure. Lo spostamento di gruppi di risorse tra diverse sottoscrizioni Azure non è supportato.
+
+.Fasi
+. Rimuovere l'ambiente di lavoro da *Canvas*.
++
+Per informazioni su come rimuovere un ambiente di lavoro, vedere link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-ontap/task-removing.html["Rimozione degli ambienti di lavoro Cloud Volumes ONTAP"].
+
+. Eseguire lo spostamento del gruppo di risorse nella console di Azure.
++
+Per completare lo spostamento, fare riferimento a. link:https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/move-resource-group-and-subscription["Spostare le risorse in un nuovo gruppo di risorse o in un abbonamento nella documentazione di Microsoft Azure"^].
+
+. In *Canvas*, scopri l'ambiente di lavoro.
+. Cercare il nuovo gruppo di risorse nelle informazioni relative all'ambiente di lavoro.
+
+
+.Risultato
+L'ambiente di lavoro e le relative risorse (macchine virtuali, dischi, account di storage, interfacce di rete, snapshot) fanno parte del nuovo gruppo di risorse.

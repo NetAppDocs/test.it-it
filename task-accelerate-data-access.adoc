@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: task-accelerate-data-access.html 
+keywords: flexcache, flexcache volumes, create a flexcache volume, provision flexcache, create flexcache volume 
+summary: Un volume FlexCache è un volume di storage che memorizza nella cache i dati di lettura NFS da un volume di origine o di origine. Le successive letture dei dati memorizzati nella cache consentono un accesso più rapido a tali dati. 
+---
+= Accelera l'accesso ai dati con FlexCache Volumes
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Un volume FlexCache è un volume di storage che memorizza nella cache i dati in lettura SMB e NFS da un volume di origine (o origine). Le successive letture dei dati memorizzati nella cache consentono un accesso più rapido a tali dati.
+
+È possibile utilizzare i volumi FlexCache per accelerare l'accesso ai dati o per trasferire il traffico dai volumi ad accesso elevato. I volumi FlexCache aiutano a migliorare le performance, soprattutto quando i client devono accedere ripetutamente agli stessi dati, perché i dati possono essere gestiti direttamente senza dover accedere al volume di origine. I volumi FlexCache funzionano bene per i carichi di lavoro di sistema che richiedono un uso intensivo della lettura.
+
+BlueXP offre gestione dei volumi FlexCache con a. link:https://docs.netapp.com/us-en/bluexp-volume-caching/index.html["Caching del volume BlueXP"^] servizio.
+
+Puoi anche utilizzare l'interfaccia a riga di comando di ONTAP o ONTAP System Manager per creare e gestire i volumi FlexCache:
+
+* http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-fc-mgmt/home.html["Guida all'alimentazione di FlexCache Volumes per un accesso più rapido ai dati"^]
+* http://docs.netapp.com/ontap-9/topic/com.netapp.doc.onc-sm-help-960/GUID-07F4C213-076D-4FE8-A8E3-410F49498D49.html["Creazione di volumi FlexCache in Gestore di sistema"^]
+
+
+BlueXP genera una licenza FlexCache per tutti i nuovi sistemi Cloud Volumes ONTAP. La licenza include un limite di utilizzo di 500 GiB.
+
+video::PBNPVRUeT1o[youtube,width=848,height=480]

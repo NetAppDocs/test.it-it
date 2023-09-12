@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: task-managing-svms.html 
+keywords: storage virtual machine, vserver, svm, storage vm, supported number, number supported 
+summary: Una VM di storage è una macchina virtuale in esecuzione in ONTAP che fornisce servizi di storage e dati ai client. Questo potrebbe essere conosciuto come SVM o vserver. Cloud Volumes ONTAP è configurato con una VM di storage per impostazione predefinita, ma alcune configurazioni supportano altre VM di storage. 
+---
+= Gestire le VM di storage in BlueXP
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+Una VM di storage è una macchina virtuale in esecuzione in ONTAP che fornisce servizi di storage e dati ai client. Potresti sapere che si tratta di un _SVM_ o di un _vserver_. Cloud Volumes ONTAP è configurato con una VM di storage per impostazione predefinita, ma alcune configurazioni supportano altre VM di storage.
+
+
+
+== Numero di VM storage supportate
+
+Alcune configurazioni supportano più VM di storage. Accedere alla https://docs.netapp.com/us-en/cloud-volumes-ontap-relnotes/index.html["Note di rilascio di Cloud Volumes ONTAP"^] Per verificare il numero di VM storage supportate per la versione di Cloud Volumes ONTAP in uso.
+
+
+
+== Lavorare con più macchine virtuali storage
+
+BlueXP supporta tutte le VM storage aggiuntive create da System Manager o CLI.
+
+Ad esempio, l'immagine seguente mostra come scegliere una VM di storage quando si crea un volume.
+
+image:screenshot_create_volume_svm.gif["Una schermata che mostra la possibilità di selezionare la VM di storage in cui si desidera creare un volume."]
+
+L'immagine seguente mostra come scegliere una VM di storage durante la replica di un volume su un altro sistema.
+
+image:screenshot_replicate_volume_svm.gif["Una schermata che mostra la possibilità di selezionare la VM di storage in cui si desidera replicare un volume."]
+
+
+
+== Modificare il nome della VM di storage predefinita
+
+BlueXP assegna automaticamente un nome alla singola VM di storage creata per Cloud Volumes ONTAP. Da System Manager, CLI o API, è possibile modificare il nome della VM di storage se si dispone di rigorosi standard di denominazione. Ad esempio, è possibile che il nome corrisponda a quello delle VM di storage per i cluster ONTAP.

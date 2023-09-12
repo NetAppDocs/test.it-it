@@ -1,0 +1,217 @@
+---
+sidebar: sidebar 
+permalink: concept-data-tiering.html 
+keywords: storage tiering, tier, tiering, data tiering, s3, s3 tiering, capacity, performance, s3 endpoint, fabric pool, fabricpool, s3 bucket, requirement, vpc endpoint, policy, policies, tiering policies, auto, snapshot only, backup, none, cooling period, volume tiering policies, blob, standard, infrequent access, hot, cool, tiering level, storage tier, storage class 
+summary: Riduci i costi di storage abilitando il tiering automatizzato dei dati cold allo storage a oggetti a basso costo. 
+---
+= Panoramica sul tiering dei dati
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Riduci i costi di storage abilitando il tiering automatizzato dei dati inattivi su storage a oggetti a basso costo. I dati attivi rimangono in SSD o HDD ad alte prestazioni, mentre i dati inattivi vengono suddivisi in livelli per lo storage a oggetti a basso costo. In questo modo è possibile recuperare spazio sullo storage primario e ridurre lo storage secondario.
+
+image:diagram_data_tiering.png["Si tratta di un'immagine concettuale che mostra i dati hot che vanno allo storage EBS e i dati inattivi che vanno allo storage S3."]
+
+Il tiering dei dati è basato sulla tecnologia FabricPool.
+
+
+NOTE: Non è necessario installare una licenza per le funzionalità per abilitare il tiering dei dati (FabricPool).
+
+ifdef::aws[]
+
+
+
+== Tiering dei dati in AWS
+
+Quando si abilita il tiering dei dati in AWS, Cloud Volumes ONTAP utilizza EBS come Tier di performance per i dati hot e AWS S3 come Tier di capacità per i dati inattivi.
+
+Tier di performance:: Il livello di performance può essere SSD General Purpose (gp3 o gp2) o SSD IOPS con provisioning (io1).
++
+--
+Si sconsiglia di eseguire il tiering dei dati sullo storage a oggetti quando si utilizzano HDD ottimizzati per il throughput (st1).
+
+--
+Tier di capacità:: Un sistema Cloud Volumes ONTAP esegue il Tier dei dati inattivi in un singolo bucket S3.
++
+--
+BlueXP crea un singolo bucket S3 per ogni ambiente di lavoro e lo nomina fabric-pool-_cluster unique identifier_. Non viene creato un bucket S3 diverso per ciascun volume.
+
+Quando BlueXP crea il bucket S3, utilizza le seguenti impostazioni predefinite:
+
+* Classe di storage: Standard
+* Crittografia predefinita: Disattivata
+* Blocca accesso pubblico: Blocca tutti gli accessi pubblici
+* Proprietà dell'oggetto: ACL attivati
+* Versione bucket: Disattivata
+* Blocco oggetto: Disattivato
+
+
+--
+Classi di storage:: La classe di storage predefinita per i dati Tiered in AWS è _Standard_. Standard è ideale per i dati ad accesso frequente memorizzati in più zone di disponibilità.
++
+--
+Se non si prevede di accedere ai dati inattivi, è possibile ridurre i costi di storage cambiando la classe di storage in una delle seguenti opzioni: _Intelligent Tiering_, _One-zone infrequent Access_, _Standard-infrequent Access_ o _S3 Glacier Instant Retrieval_. Quando si modifica la classe di storage, i dati inattivi vengono avviati nella classe di storage Standard e vengono passati alla classe di storage selezionata, se non si accede ai dati dopo 30 giorni.
+
+I costi di accesso sono più elevati se si accede ai dati, quindi tenere in considerazione questo aspetto prima di modificare la classe di storage. https://aws.amazon.com/s3/storage-classes["Scopri di più sulle classi di storage Amazon S3"^].
+
+È possibile selezionare una classe di storage quando si crea l'ambiente di lavoro e modificarla in qualsiasi momento. Per ulteriori informazioni sulla modifica della classe di storage, vedere link:task-tiering.html["Tiering dei dati inattivi su storage a oggetti a basso costo"].
+
+La classe di storage per il tiering dei dati è estesa a tutto il sistema, non per volume.
+
+--
+
+
+endif::aws[]
+
+ifdef::azure[]
+
+
+
+== Tiering dei dati in Azure
+
+Quando abiliti il tiering dei dati in Azure, Cloud Volumes ONTAP utilizza i dischi gestiti da Azure come Tier di performance per i dati hot e lo storage Blob Azure come Tier di capacità per i dati inattivi.
+
+Tier di performance:: Il Tier di performance può essere SSD o HDD.
+Tier di capacità:: Un sistema Cloud Volumes ONTAP esegue il tiering dei dati inattivi in un singolo contenitore Blob.
++
+--
+BlueXP crea un nuovo account storage con un container per ogni ambiente di lavoro Cloud Volumes ONTAP. Il nome dell'account di storage è casuale. Non viene creato un container diverso per ogni volume.
+
+BlueXP crea l'account storage con le seguenti impostazioni:
+
+* Tier di accesso: Hot
+* Performance: Standard
+* Ridondanza: Storage ridondante in locale (LRS)
+* Account: StorageV2 (General Purpose v2)
+* Richiedi trasferimento sicuro per le operazioni API REST: Abilitato
+* Access key account storage: Enabled (accesso chiave account storage)
+* Versione minima TLS: Versione 1.2
+* Crittografia dell'infrastruttura: Disattivata
+
+
+--
+Tier di accesso allo storage:: Il Tier di accesso allo storage predefinito per i dati a più livelli in Azure è il _hot_ Tier. Il Tier hot è ideale per i dati con accesso frequente nel Tier di capacità.
++
+--
+Se non si prevede di accedere ai dati inattivi nel Tier di capacità, è possibile ridurre i costi di storage passando al Tier di storage _COOL_. Quando si imposta il Tier di storage su COOL, i dati del Tier di capacità inattivi vengono spostati direttamente nel Tier di storage cool.
+
+I costi di accesso sono più elevati se si accede ai dati, quindi è necessario prendere in considerazione questo aspetto prima di modificare il Tier di storage. https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-storage-tiers["Scopri di più sui Tier di accesso allo storage Azure Blob"^].
+
+È possibile selezionare un Tier di storage quando si crea l'ambiente di lavoro e modificarlo in qualsiasi momento. Per ulteriori informazioni sulla modifica del Tier di storage, vedere link:task-tiering.html["Tiering dei dati inattivi su storage a oggetti a basso costo"].
+
+Il Tier di accesso allo storage per il tiering dei dati è esteso a tutto il sistema, non per volume.
+
+--
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+
+
+== Tiering dei dati in Google Cloud
+
+Quando abiliti il tiering dei dati in Google Cloud, Cloud Volumes ONTAP utilizza i dischi persistenti come Tier di performance per i dati hot e un bucket di storage cloud come Tier di capacità per i dati inattivi.
+
+Tier di performance:: Il Tier di performance può essere costituito da dischi persistenti SSD, dischi persistenti bilanciati o dischi persistenti standard.
+Tier di capacità:: Un sistema Cloud Volumes ONTAP esegue il Tier dei dati inattivi in un singolo bucket di storage cloud di Google.
++
+--
+BlueXP crea un bucket per ogni ambiente di lavoro e lo nomina fabric-pool-_cluster unique identifier_. Non viene creato un bucket diverso per ogni volume.
+
+Quando BlueXP crea il bucket, utilizza le seguenti impostazioni predefinite:
+
+* Tipo di ubicazione: Regione
+* Classe di storage: Standard
+* Accesso pubblico: Soggetto a ACL a oggetti
+* Controllo degli accessi: Granulare
+* Protezione: Nessuna
+* Crittografia dei dati: Chiave gestita da Google
+
+
+--
+Classi di storage:: La classe di storage predefinita per i dati a più livelli è la classe _Standard Storage_. Se l'accesso ai dati non è frequente, puoi ridurre i costi di storage passando a _Nearline Storage_ o _Coldline Storage_. Quando si modifica la classe di storage, i dati inattivi vengono spostati direttamente nella classe selezionata.
++
+--
+I costi di accesso sono più elevati se si accede ai dati, quindi tenere in considerazione questo aspetto prima di modificare la classe di storage. https://cloud.google.com/storage/docs/storage-classes["Scopri di più sulle classi di storage per Google Cloud Storage"^].
+
+È possibile selezionare un Tier di storage quando si crea l'ambiente di lavoro e modificarlo in qualsiasi momento. Per ulteriori informazioni sulla modifica della classe di storage, vedere link:task-tiering.html["Tiering dei dati inattivi su storage a oggetti a basso costo"].
+
+La classe di storage per il tiering dei dati è estesa a tutto il sistema, non per volume.
+
+--
+
+
+endif::gcp[]
+
+
+
+== Tiering dei dati e limiti di capacità
+
+Se si abilita il tiering dei dati, il limite di capacità di un sistema rimane invariato. Il limite viene distribuito tra il Tier di performance e il Tier di capacità.
+
+
+
+== Policy di tiering dei volumi
+
+Per attivare il tiering dei dati, è necessario selezionare una policy di tiering dei volumi quando si crea, modifica o replica un volume. È possibile selezionare un criterio diverso per ciascun volume.
+
+Alcuni criteri di tiering hanno un periodo di raffreddamento minimo associato, che imposta il tempo in cui i dati dell'utente in un volume devono rimanere inattivi per essere considerati "freddi" e spostati al livello di capacità. Il periodo di raffreddamento inizia quando i dati vengono scritti nell'aggregato.
+
+
+TIP: È possibile modificare il periodo di raffreddamento minimo e la soglia aggregata predefinita del 50% (ulteriori informazioni su quelle riportate di seguito). http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-AD522711-01F9-4413-A254-929EAE871EBF.html["Scopri come modificare il periodo di raffreddamento"^] e. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-mgng-stor-tier-fp/GUID-8FC4BFD5-F258-4AA6-9FCB-663D42D92CAA.html["scopri come modificare la soglia"^].
+
+BlueXP consente di scegliere tra le seguenti policy di tiering dei volumi quando si crea o si modifica un volume:
+
+Solo Snapshot:: Dopo che un aggregato ha raggiunto la capacità del 50%, Cloud Volumes ONTAP esegue il Tier dei dati cold user delle copie Snapshot non associate al file system attivo al Tier di capacità. Il periodo di raffreddamento è di circa 2 giorni.
++
+--
+In lettura, i blocchi di dati cold sul Tier di capacità diventano hot e vengono spostati sul Tier di performance.
+
+--
+Tutto:: Tutti i dati (non inclusi i metadati) vengono immediatamente contrassegnati come cold e tiered per lo storage a oggetti il più presto possibile. Non è necessario attendere 48 ore affinché i nuovi blocchi di un volume si raffreddino. Tenere presente che i blocchi situati nel volume prima dell'impostazione del criterio All richiedono 48 ore per diventare freddi.
++
+--
+In caso di lettura, i blocchi di dati cold nel Tier cloud restano freddi e non vengono riscritti nel Tier di performance. Questo criterio è disponibile a partire da ONTAP 9.6.
+
+--
+Automatico:: Dopo che un aggregato ha raggiunto la capacità del 50%, Cloud Volumes ONTAP esegue il Tier dei blocchi di dati cold in un volume fino a raggiungere un livello di capacità. I dati cold non includono solo le copie Snapshot, ma anche i dati cold user dal file system attivo. Il periodo di raffreddamento è di circa 31 giorni.
++
+--
+Questo criterio è supportato a partire da Cloud Volumes ONTAP 9.4.
+
+Se letti in modo casuale, i blocchi di dati cold nel Tier di capacità diventano hot e passano al Tier di performance. Se letti in base a letture sequenziali, come quelle associate a scansioni di indice e antivirus, i blocchi di dati cold rimangono freddi e non passano al livello di performance.
+
+--
+Nessuno:: Mantiene i dati di un volume nel Tier di performance, evitando che vengano spostati nel Tier di capacità.
+
+
+Quando si replica un volume, è possibile scegliere se eseguire il Tier dei dati sullo storage a oggetti. In tal caso, BlueXP applica il criterio *Backup* al volume di protezione dei dati. A partire da Cloud Volumes ONTAP 9.6, la policy di tiering *all* sostituisce la policy di backup.
+
+
+
+=== La disattivazione di Cloud Volumes ONTAP influisce sul periodo di raffreddamento
+
+I blocchi di dati vengono raffreddati mediante scansioni di raffreddamento. Durante questo processo, i blocchi che non sono stati utilizzati hanno spostato la temperatura del blocco (raffreddato) al valore successivo più basso. Il tempo di raffreddamento predefinito dipende dalla policy di tiering del volume:
+
+* Auto: 31 giorni
+* Solo snapshot: 2 giorni
+
+
+Affinché la scansione di raffreddamento funzioni, è necessario che Cloud Volumes ONTAP sia in esecuzione. Se Cloud Volumes ONTAP è disattivato, anche il raffreddamento si interrompe. Di conseguenza, è possibile ottenere tempi di raffreddamento più lunghi.
+
+
+TIP: Quando Cloud Volumes ONTAP è disattivato, la temperatura di ciascun blocco viene mantenuta fino al riavvio del sistema. Ad esempio, se la temperatura di un blocco è 5 quando si spegne il sistema, la temperatura rimane 5 quando si riaccende il sistema.
+
+
+
+== Impostazione del tiering dei dati
+
+Per istruzioni e un elenco delle configurazioni supportate, vedere link:task-tiering.html["Tiering dei dati inattivi su storage a oggetti a basso costo"].

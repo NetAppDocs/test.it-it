@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: task-manage-capacity-settings.html 
+keywords: aggregates, delete aggregates, add disks, view aggregates 
+summary: Gestisci gli aggregati aggiungendo dischi, visualizzando informazioni sugli aggregati ed eliminandoli. 
+---
+= Gestire le impostazioni di capacità su un connettore
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Ogni connettore dispone di impostazioni che determinano il modo in cui gestisce la capacità aggregata per Cloud Volumes ONTAP.
+
+Queste impostazioni influiscono su tutti i sistemi Cloud Volumes ONTAP gestiti da un connettore. Se si dispone di un altro connettore, è possibile configurarlo in modo diverso.
+
+.Autorizzazioni richieste
+Per modificare le impostazioni del connettore sono necessari i privilegi di amministratore dell'account.
+
+.Fasi
+. Nella parte superiore destra della console BlueXP, fare clic sull'icona Impostazioni e selezionare *Impostazioni connettore*.
++
+image::screenshot_settings_connector_button.png[schermata impostazioni pulsante connettore]
+
+. In *capacità*, modificare una delle seguenti impostazioni:
++
+Modalità di gestione della capacità:: Scegli se BlueXP ti notifica le decisioni relative alla capacità dello storage o se BlueXP gestisce automaticamente i requisiti di capacità per te.
++
+--
+link:concept-storage-management.html#capacity-management["Scopri come funziona la modalità di gestione della capacità"].
+
+--
+Soglia capacità aggregata - rapporto spazio libero:: Attiva una notifica quando il rapporto di spazio libero su un aggregato scende al di sotto della soglia specificata.
++
+--
+Il rapporto di spazio libero viene calcolato come segue:
+
+(capacità aggregata - capacità totale utilizzata sull'aggregato) / capacità aggregata
+
+--
+Soglie di capacità aggregate - rapporto spazio libero per il tiering dei dati:: Definisce la quantità di spazio libero richiesta sul Tier di performance (dischi) quando si tierano i dati su un Tier di capacità (storage a oggetti).
++
+--
+Il rapporto è importante per gli scenari di disaster recovery. Man mano che i dati vengono letti dal Tier di capacità, Cloud Volumes ONTAP sposta i dati nel Tier di performance per offrire performance migliori. Se lo spazio non è sufficiente, Cloud Volumes ONTAP non può spostare i dati.
+
+--
+
+
+. Fare clic su *Save* (Salva).
+

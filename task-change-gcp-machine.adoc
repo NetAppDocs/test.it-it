@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: task-change-gcp-machine.html 
+keywords: change machine type, google cloud machine type, gcp machine type, modify machine type 
+summary: 'È possibile scegliere tra diversi tipi di computer quando si avvia Cloud Volumes ONTAP in Google Cloud. È possibile modificare l"istanza o il tipo di macchina in qualsiasi momento se si determina che è sottodimensionato o sovradimensionato per le proprie esigenze.' 
+---
+= Modificare il tipo di macchina Google Cloud per Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+È possibile scegliere tra diversi tipi di computer quando si avvia Cloud Volumes ONTAP in Google Cloud. È possibile modificare l'istanza o il tipo di macchina in qualsiasi momento se si determina che è sottodimensionato o sovradimensionato per le proprie esigenze.
+
+.A proposito di questa attività
+* Il giveback automatico deve essere attivato su una coppia Cloud Volumes ONTAP ha (impostazione predefinita). In caso contrario, l'operazione avrà esito negativo.
++
+http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-hacg/GUID-3F50DE15-0D01-49A5-BEFD-D529713EC1FA.html["Documentazione di ONTAP 9: Comandi per la configurazione del giveback automatico"^]
+
+* La modifica del tipo di computer può influire sui costi di servizio di Google Cloud.
+* L'operazione riavvia Cloud Volumes ONTAP.
++
+Per i sistemi a nodo singolo, l'i/o viene interrotto.
+
++
+Per le coppie ha, il cambiamento è senza interruzioni. Le coppie HA continuano a servire i dati.
+
++
+
+TIP: BlueXP modifica correttamente un nodo alla volta avviando il Takeover e attendendo il give back. Il team di QA di NetApp ha testato sia la scrittura che la lettura dei file durante questo processo e non ha rilevato alcun problema sul lato client. Con la modifica delle connessioni, abbiamo visto tentativi a livello di i/o, ma il livello applicativo ha superato questi brevi "re-wire" delle connessioni NFS/CIFS.
+
+
+
+.Fasi
+. Nella pagina Canvas, selezionare l'ambiente di lavoro.
+. Nella scheda Panoramica, fare clic sul pannello funzioni, quindi fare clic sull'icona a forma di matita accanto a *tipo di macchina*.
++
+image:screenshot_features_machine_type.png["Una schermata che mostra l'impostazione del tipo di macchina nel pannello funzioni disponibile nella parte superiore destra della pagina Panoramica durante la visualizzazione di un ambiente di lavoro."]
+
++
+.. Se si utilizza una licenza PAYGO basata su nodo, è possibile scegliere una licenza e un tipo di macchina diversi facendo clic sull'icona a forma di matita accanto a *tipo di licenza*.
+
+
+. Scegliere un tipo di macchina, selezionare la casella di controllo per confermare di aver compreso le implicazioni della modifica, quindi fare clic su *Cambia*.
+
+
+.Risultato
+Cloud Volumes ONTAP si riavvia con la nuova configurazione.
