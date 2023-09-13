@@ -1,0 +1,141 @@
+---
+sidebar: sidebar 
+permalink: concept-security.html 
+keywords: security, encryption, antivirus, concepts, key managers, safenet, kms, keys, vscan, encrypt, key management service, cmk, customer master key, data at rest, data-at-rest, netapp storage encryption, certificate signing request, csr, certificate, ca certificate, virus, scan, virus scan, certificate authority, netapp volume encryption, nve, volume encryption, key management server, ransomware, fpolicy, snapshots 
+summary: Cloud Volumes ONTAP supporta la crittografia dei dati e fornisce protezione contro virus e ransomware. 
+---
+= Sicurezza
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cloud Volumes ONTAP supporta la crittografia dei dati e fornisce protezione contro virus e ransomware.
+
+
+
+== Crittografia dei dati inattivi
+
+Cloud Volumes ONTAP supporta le seguenti tecnologie di crittografia:
+
+* Soluzioni di crittografia NetApp (NVE e NAE)
+
+
+ifdef::aws[]
+
+* Servizio di gestione delle chiavi AWS
+
+
+endif::aws[]
+
+ifdef::azure[]
+
+* Azure Storage Service Encryption
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* Crittografia predefinita di Google Cloud Platform
+
+
+endif::gcp[]
+
+Puoi utilizzare le soluzioni di crittografia NetApp con crittografia nativa del tuo cloud provider, che crittografa i dati a livello di hypervisor. In questo modo si fornirebbe una doppia crittografia, che potrebbe essere utile per i dati molto sensibili. Quando si accede ai dati crittografati, questi vengono crittografati due volte, una volta a livello di hypervisor (utilizzando le chiavi del cloud provider) e poi di nuovo utilizzando le soluzioni di crittografia NetApp (utilizzando le chiavi di un gestore di chiavi esterno).
+
+
+
+=== Soluzioni di crittografia NetApp (NVE e NAE)
+
+Supporto di Cloud Volumes ONTAP https://www.netapp.com/us/media/ds-3899.pdf["NetApp Volume Encryption (NVE) e NetApp aggregate Encryption (NAE)"^]. NVE e NAE sono soluzioni basate su software che consentono la crittografia dei volumi (data-at-rest) conforme a FIPS 140-2. Sia NVE che NAE utilizzano la crittografia AES a 256 bit.
+
+* NVE crittografa i dati inattivi un volume alla volta. Ogni volume di dati dispone di una chiave di crittografia univoca.
+* NAE è un'estensione di NVE, che crittografa i dati per ogni volume e i volumi condividono una chiave nell'aggregato. NAE consente inoltre di deduplicare i blocchi comuni di tutti i volumi dell'aggregato.
+
+
+NVE e NAE sono supportati con un gestore di chiavi esterno.
+
+ifdef::azure[]
+
+endif::azure[]
+
+ifdef::gcp[]
+
+endif::gcp[]
+
+I nuovi aggregati hanno NetApp aggregate Encryption (NAE) abilitato per impostazione predefinita dopo aver configurato un gestore di chiavi esterno. I nuovi volumi che non fanno parte di un aggregato NAE avranno NetApp Volume Encryption (NVE) abilitato per impostazione predefinita (ad esempio, se si dispone di aggregati creati prima di impostare un gestore di chiavi esterno).
+
+La configurazione di un gestore di chiavi supportato è l'unica operazione necessaria. Per istruzioni sulla configurazione, fare riferimento a. link:task-encrypting-volumes.html["Crittografia dei volumi con le soluzioni di crittografia NetApp"].
+
+ifdef::aws[]
+
+
+
+=== Servizio di gestione delle chiavi AWS
+
+Quando si avvia un sistema Cloud Volumes ONTAP in AWS, è possibile attivare la crittografia dei dati utilizzando http://docs.aws.amazon.com/kms/latest/developerguide/overview.html["AWS Key Management Service (KMS)"^]. BlueXP richiede le chiavi dati utilizzando una chiave master del cliente (CMK).
+
+
+TIP: Non è possibile modificare il metodo di crittografia dei dati AWS dopo aver creato un sistema Cloud Volumes ONTAP.
+
+Se si desidera utilizzare questa opzione di crittografia, assicurarsi che AWS KMS sia configurato correttamente. Per ulteriori informazioni, vedere link:task-setting-up-kms.html["Configurazione di AWS KMS"].
+
+endif::aws[]
+
+ifdef::azure[]
+
+
+
+=== Azure Storage Service Encryption
+
+I dati vengono crittografati automaticamente su Cloud Volumes ONTAP in Azure utilizzando https://azure.microsoft.com/en-us/documentation/articles/storage-service-encryption/["Azure Storage Service Encryption"^] Con una chiave gestita da Microsoft.
+
+Se preferisci, puoi utilizzare le tue chiavi di crittografia. link:task-set-up-azure-encryption.html["Scopri come configurare Cloud Volumes ONTAP per utilizzare una chiave gestita dal cliente in Azure"].
+
+endif::azure[]
+
+ifdef::gcp[]
+
+
+
+=== Crittografia predefinita di Google Cloud Platform
+
+https://cloud.google.com/security/encryption-at-rest/["Crittografia dei dati inattivi di Google Cloud Platform"^] È attivato per impostazione predefinita per Cloud Volumes ONTAP. Non è richiesta alcuna configurazione.
+
+Mentre Google Cloud Storage crittografa sempre i tuoi dati prima che vengano scritti su disco, puoi utilizzare le API BlueXP per creare un sistema Cloud Volumes ONTAP che utilizza _chiavi di crittografia gestite dal cliente_. Si tratta di chiavi che vengono generate e gestite in GCP utilizzando il Cloud Key Management Service. link:task-setting-up-gcp-encryption.html["Scopri di più"].
+
+endif::gcp[]
+
+
+
+== Scansione virus ONTAP
+
+È possibile utilizzare la funzionalità antivirus integrata nei sistemi ONTAP per proteggere i dati da virus o altri codici dannosi.
+
+La scansione antivirus di ONTAP, denominata _Vscan_, combina il software antivirus di terze parti più all'avanguardia con le funzionalità di ONTAP che offrono la flessibilità necessaria per controllare quali file vengono sottoposti a scansione e quando.
+
+Per informazioni su vendor, software e versioni supportate da Vscan, consultare http://mysupport.netapp.com/matrix["Matrice di interoperabilità NetApp"^].
+
+Per informazioni su come configurare e gestire la funzionalità antivirus sui sistemi ONTAP, consultare http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-acg/home.html["Guida alla configurazione antivirus di ONTAP 9"^].
+
+
+
+== Protezione ransomware
+
+Gli attacchi ransomware possono costare tempo di business, risorse e reputazione. BlueXP consente di implementare la soluzione NetApp per ransomware, che fornisce strumenti efficaci per la visibilità, il rilevamento e la risoluzione dei problemi.
+
+* BlueXP identifica i volumi che non sono protetti da un criterio Snapshot e consente di attivare il criterio Snapshot predefinito su tali volumi.
++
+Le copie Snapshot sono di sola lettura, impedendo la corruzione del ransomware. Possono inoltre offrire la granularità necessaria per creare immagini di una singola copia di file o di una soluzione completa di disaster recovery.
+
+* BlueXP consente inoltre di bloccare le estensioni di file ransomware comuni attivando la soluzione FPolicy di ONTAP.
+
+
+image:screenshot_ransomware_protection.gif["Una schermata che mostra la pagina di protezione ransomware disponibile all'interno di un ambiente di lavoro. La schermata mostra il numero di volumi senza Snapshot Policy e la possibilità di bloccare le estensioni dei file ransomware."]
+
+link:task-protecting-ransomware.html["Scopri come implementare la soluzione NetApp per ransomware"].

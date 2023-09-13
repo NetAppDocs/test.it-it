@@ -1,0 +1,275 @@
+---
+sidebar: sidebar 
+permalink: reference-default-configs.html 
+keywords: svm, LIF, LIFs, configuration backups, attributes, autosize, security style, space guarantee, unix permissions, NTFS, UNIX, boot, root, disks, aggr0, aggr1, svm, svms, storage virtual machine, LIF failover, failover, attributes, volume attributes, boot disk, root disk, licenses, feature licenses, default licenses, ontap licenses, ontap features 
+summary: La configurazione predefinita di Cloud Volumes ONTAP consente di configurare e amministrare i sistemi, in particolare se si conosce ONTAP perché la configurazione predefinita di Cloud Volumes ONTAP è diversa da ONTAP. 
+---
+= Configurazione predefinita per Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La configurazione predefinita di Cloud Volumes ONTAP consente di configurare e amministrare i sistemi, in particolare se si conosce ONTAP perché la configurazione predefinita di Cloud Volumes ONTAP è diversa da ONTAP.
+
+
+
+== Impostazione predefinita
+
+* BlueXP crea una VM di storage per il servizio dei dati quando implementa Cloud Volumes ONTAP. Alcune configurazioni supportano macchine virtuali storage aggiuntive. link:task-managing-svms.html["Scopri di più sulla gestione delle VM di storage"].
++
+A partire dalla versione BlueXP 3.9.5, il reporting dello spazio logico viene attivato sulla VM di storage iniziale. Quando lo spazio viene segnalato logicamente, ONTAP riporta lo spazio del volume in modo che tutto lo spazio fisico salvato dalle funzionalità di efficienza dello storage venga riportato come utilizzato.
+
+* BlueXP installa automaticamente le seguenti licenze di ONTAP Feature su Cloud Volumes ONTAP:
++
+** CIFS
+** FlexCache
+** FlexClone
+** ISCSI
+** Gestione delle chiavi di crittografia multi-tenant (MTEKM), a partire da Cloud Volumes ONTAP 9.12.1 GA
+** NetApp Volume Encryption (solo per sistemi BYOL o PAYGO registrati)
+** NFS
+
+
+
+
+ifdef::aws[]
+
+endif::aws[]
+
+ifdef::azure[]
+
+endif::azure[]
+
+* SnapMirror
+* SnapRestore
+* SnapVault
++
+** Per impostazione predefinita, vengono create diverse interfacce di rete:
+
+
+* Una LIF di gestione del cluster
+* Un LIF intercluster
+
+
+ifdef::azure[]
+
+* Una LIF di gestione SVM sui sistemi ha in Azure
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+* Una LIF di gestione SVM sui sistemi ha in Google Cloud
+
+
+endif::gcp[]
+
+ifdef::aws[]
+
+* LIF di gestione SVM su sistemi a nodo singolo in AWS
+
+
+endif::aws[]
+
+* Una LIF di gestione dei nodi
+
+
+ifdef::gcp[]
+
++
+In Google Cloud, questa LIF è combinata con la intercluster LIF.
+
+endif::gcp[]
+
+* Una LIF di dati iSCSI
+* Una LIF di dati CIFS e NFS
++
+
+NOTE: Il failover LIF è disattivato per impostazione predefinita per Cloud Volumes ONTAP a causa dei requisiti del cloud provider. La migrazione di una LIF a una porta diversa interrompe la mappatura esterna tra gli indirizzi IP e le interfacce di rete sull'istanza, rendendo la LIF inaccessibile.
+
++
+** Cloud Volumes ONTAP invia i backup di configurazione al connettore utilizzando HTTP.
++
+I backup sono accessibili da \http://ipaddress/occm/offboxconfig/ dove _ipaddress_ è l'indirizzo IP del connettore host.
+
+** BlueXP imposta alcuni attributi di volume in modo diverso rispetto ad altri strumenti di gestione (ad esempio, System Manager o CLI).
++
+Nella tabella seguente sono elencati gli attributi del volume impostati da BlueXP in modo diverso dai valori predefiniti:
+
++
+[cols="15,85"]
+|===
+| Attributo | Valore impostato da BlueXP 
+
+
+| Modalità di dimensionamento automatico | crescere 
+
+
+| Dimensionamento automatico massimo  a| 
+1,000%
+
+
+NOTE: L'amministratore dell'account può modificare questo valore dalla pagina Impostazioni.
+
+
+
+| Stile di sicurezza | NTFS per volumi CIFS
+UNIX per volumi NFS 
+
+
+| Stile garanzia di spazio | nessuno 
+
+
+| Autorizzazioni UNIX (solo NFS) | 777 
+|===
++
+Vedere link:https://docs.netapp.com/us-en/ontap-cli-9121/volume-create.html["ONTAP _volume create_ man page"] per informazioni su questi attributi.
+
+
+
+
+
+
+
+== Dischi interni per i dati di sistema
+
+Oltre allo storage per i dati degli utenti, BlueXP acquista anche lo storage cloud per i dati di sistema.
+
+ifdef::aws[]
+
+
+
+=== AWS
+
+* Tre dischi per nodo per i dati di boot, root e core:
++
+** 45 disco GiB io1 per i dati di boot
+** Disco gp3 da 140 GiB per i dati root
+** Disco gp2 da 540 GiB per i dati principali
+
+
+* Un'istantanea EBS per ogni disco di boot e disco root
++
+
+NOTE: Le snapshot vengono create automaticamente al riavvio.
+
+* Per le coppie ha, un volume EBS per l'istanza Mediator, che è di circa 8 GiB
+* Quando si attiva la crittografia dei dati in AWS utilizzando il servizio di gestione delle chiavi (KMS), vengono crittografati anche i dischi di avvio e i dischi root per Cloud Volumes ONTAP. Questo include il disco di boot per l'istanza del mediatore in una coppia ha. I dischi vengono crittografati utilizzando la CMK selezionata quando si crea l'ambiente di lavoro.
+
+
+
+TIP: In AWS, la NVRAM si trova sul disco di avvio.
+
+endif::aws[]
+
+ifdef::azure[]
+
+
+
+=== Azure (nodo singolo)
+
+* Tre dischi SSD Premium:
++
+** Un disco da 10 GiB per i dati di avvio
+** Un disco da 140 GiB per i dati root
+** Un disco da 512 GiB per NVRAM
++
+Se la macchina virtuale scelta per Cloud Volumes ONTAP supporta gli SSD Ultra, il sistema utilizza un SSD Ultra da 32 GB per la NVRAM, anziché un SSD Premium.
+
+
+
+* Un disco HDD standard da 1024 GiB per il risparmio dei core
+* Uno snapshot Azure per ogni disco di boot e disco root
+* Per impostazione predefinita, ogni disco in Azure viene crittografato a riposo.
+
+
+
+
+=== Azure (coppia ha)
+
+.COPPIE HA con il blob di pagina
+* Due dischi SSD Premium da 10 GiB per il volume di boot (uno per nodo)
+* Due blob di pagina 140 GiB Premium Storage per il volume root (uno per nodo)
+* Due dischi HDD standard da 1024 GiB per il risparmio di core (uno per nodo)
+* Due dischi SSD Premium da 512 GiB per NVRAM (uno per nodo)
+* Uno snapshot Azure per ogni disco di boot e disco root
++
+
+NOTE: Le snapshot vengono create automaticamente al riavvio.
+
+* Per impostazione predefinita, ogni disco in Azure viene crittografato a riposo.
+
+
+.Coppie HA in più zone di disponibilità
+* Due dischi SSD Premium da 10 GiB per il volume di boot (uno per nodo)
+* Due blob di pagine 512 GiB Premium Storage per il volume root (uno per nodo)
+* Due dischi HDD standard da 1024 GiB per il risparmio di core (uno per nodo)
+* Due dischi SSD Premium da 512 GiB per NVRAM (uno per nodo)
+* Uno snapshot Azure per ogni disco di boot e disco root
++
+
+NOTE: Le snapshot vengono create automaticamente al riavvio.
+
+* Per impostazione predefinita, ogni disco in Azure viene crittografato a riposo.
+
+
+endif::azure[]
+
+ifdef::gcp[]
+
+
+
+=== Google Cloud (nodo singolo)
+
+* Un disco persistente SSD da 10 GiB per i dati di avvio
+* Un disco persistente SSD da 64 GiB per i dati root
+* Un disco persistente SSD da 500 GiB per NVRAM
+* Un disco persistente standard da 315 GiB per il risparmio dei core
+* Snapshot per i dati di boot e root
++
+
+NOTE: Le snapshot vengono create automaticamente al riavvio.
+
+* I dischi di boot e root sono crittografati per impostazione predefinita.
+
+
+
+
+=== Google Cloud (coppia ha)
+
+* Due dischi persistenti SSD da 10 GiB per i dati di avvio
+* Quattro dischi persistenti SSD da 64 GiB per i dati root
+* Due dischi persistenti SSD da 500 GiB per NVRAM
+* Due dischi persistenti standard da 315 GiB per il risparmio dei core
+* Un disco persistente standard da 10 GiB per i dati del mediatore
+* Un disco persistente standard da 10 GiB per i dati di avvio del mediatore
+* Snapshot per i dati di boot e root
++
+
+NOTE: Le snapshot vengono create automaticamente al riavvio.
+
+* I dischi di boot e root sono crittografati per impostazione predefinita.
+
+
+endif::gcp[]
+
+
+
+=== Dove risiedono i dischi
+
+BlueXP definisce lo storage come segue:
+
+* I dati di avvio risiedono su un disco collegato all'istanza o alla macchina virtuale.
++
+Questo disco, che contiene l'immagine di avvio, non è disponibile per Cloud Volumes ONTAP.
+
+* I dati root, che contengono la configurazione del sistema e i log, risiedono in aggr0.
+* Il volume root della macchina virtuale di storage (SVM) risiede in aggr1.
+* I volumi di dati risiedono anche in aggr1.
+

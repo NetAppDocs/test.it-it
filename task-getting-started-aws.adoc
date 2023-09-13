@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: task-getting-started-aws.html 
+keywords: amazon web services, aws, netapp, data fabric, hybrid cloud, cloud, public cloud, networking, vpc, quick, getting started, install, installing, deploy, deploying, setup, setting up, launching, requirements, prerequisites, cloud central, get started, network, vpn, multi-cloud, tier, tiering, storage tier, data tier, vpc endpoint, endpoint, S3, subscribe, subscribing, marketplace, granting, permissions, policy, iam policy, ec2 console, ami, mediator, connectivity, internet, outbound, endpoint, connection, networks, replicating, ec2 service, policies, attach, iam user, access key, secret key, keys, sign up, cloud manager, BlueXP, cloud volumes ontap, cloud ontap, create 
+summary: Inizia subito con Cloud Volumes ONTAP per AWS in pochi passaggi. 
+---
+= Avvio rapido di Cloud Volumes ONTAP in AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Inizia a utilizzare Cloud Volumes ONTAP in AWS in pochi passaggi.
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["Uno"] Creare un connettore
+[role="quick-margin-para"]
+Se non si dispone di un https://docs.netapp.com/us-en/bluexp-setup-admin/concept-connectors.html["Connettore"^] Tuttavia, un amministratore dell'account deve crearne uno. https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-aws.html["Scopri come creare un connettore in AWS"^]
+
+[role="quick-margin-para"]
+Se si desidera implementare Cloud Volumes ONTAP in una subnet in cui non è disponibile alcun accesso a Internet, è necessario installare manualmente il connettore e accedere all'interfaccia utente di BlueXP in esecuzione su tale connettore. https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-private-mode.html["Scopri come installare manualmente il connettore in una posizione senza accesso a Internet"^]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png["Due"] Pianificare la configurazione
+[role="quick-margin-para"]
+BlueXP offre pacchetti preconfigurati che soddisfano i requisiti del carico di lavoro, oppure è possibile creare una configurazione personalizzata. Se si sceglie una configurazione personalizzata, è necessario comprendere le opzioni disponibili. link:task-planning-your-config.html["Scopri di più"].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["Tre"] Configurare la rete
+[role="quick-margin-list"]
+. Assicurarsi che il VPC e le subnet supportino la connettività tra il connettore e Cloud Volumes ONTAP.
+. Abilitare l'accesso a Internet in uscita dal VPC di destinazione per NetApp AutoSupport.
++
+Questo passaggio non è necessario se si implementa Cloud Volumes ONTAP in una posizione in cui non è disponibile alcun accesso a Internet.
+
+. Impostare un endpoint VPC sul servizio S3.
++
+È necessario un endpoint VPC se si desidera eseguire il tiering dei dati cold da Cloud Volumes ONTAP a uno storage a oggetti a basso costo.
+
+
+
+[role="quick-margin-para"]
+link:reference-networking-aws.html["Scopri di più sui requisiti di rete"].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["Quattro"] Configurare AWS KMS
+[role="quick-margin-para"]
+Se si desidera utilizzare la crittografia Amazon con Cloud Volumes ONTAP, è necessario assicurarsi che esista una chiave master cliente (CMK) attiva. È inoltre necessario modificare il criterio delle chiavi per ogni CMK aggiungendo il ruolo IAM che fornisce le autorizzazioni al connettore come _utente chiave_. link:task-setting-up-kms.html["Scopri di più"].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png["Cinque"] Avviare Cloud Volumes ONTAP utilizzando BlueXP
+[role="quick-margin-para"]
+Fare clic su *Add Working Environment* (Aggiungi ambiente di lavoro), selezionare il tipo di sistema che si desidera implementare e completare la procedura guidata. link:task-deploying-otc-aws.html["Leggi le istruzioni dettagliate"].
+
+.Link correlati
+* https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-aws.html["Creazione di un connettore da BlueXP"^]
+* https://docs.netapp.com/us-en/bluexp-setup-admin/task-install-connector-aws.html["Avvio di un connettore da AWS Marketplace"^]
+* https://docs.netapp.com/us-en/bluexp-setup-admin/task-install-connector-on-prem.html["Installazione del software del connettore su un host Linux"^]
+* https://docs.netapp.com/us-en/bluexp-setup-admin/reference-permissions-aws.html["Cosa fa BlueXP con le autorizzazioni AWS"^]
+

@@ -1,0 +1,83 @@
+---
+sidebar: sidebar 
+permalink: task-manage-aggregates.html 
+keywords: aggregates, delete aggregates, add disks, view aggregates 
+summary: Gestisci gli aggregati aggiungendo dischi, visualizzando informazioni sugli aggregati ed eliminandoli. 
+---
+= Gestire gli aggregati
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Gestisci gli aggregati aggiungendo dischi, visualizzando informazioni sugli aggregati ed eliminandoli.
+
+
+CAUTION: Tutti i dischi e gli aggregati devono essere creati ed eliminati direttamente da BlueXP. Non eseguire queste azioni da un altro tool di gestione. In questo modo si può influire sulla stabilità del sistema, ostacolare la possibilità di aggiungere dischi in futuro e potenzialmente generare tariffe ridondanti per i provider di cloud.
+
+.Prima di iniziare
+Se si desidera eliminare un aggregato, è necessario prima eliminare i volumi nell'aggregato.
+
+.A proposito di questa attività
+Se un aggregato sta esaurendo lo spazio, è possibile spostare i volumi in un altro aggregato utilizzando System Manager.
+
+.Fasi
+. Dal menu di navigazione a sinistra, selezionare *Storage > Canvas*.
+. Nella pagina Canvas, fare doppio clic sull'ambiente di lavoro Cloud Volumes ONTAP su cui si desidera gestire gli aggregati.
+. Nell'ambiente di lavoro, fare clic sulla scheda *aggregati*.
+. Nella scheda aggregati, selezionare il titolo desiderato e fare clic sul pulsante *... (icona ellisse)*.
++
+image:screenshot_aggr_menu_options.png["Una schermata delle opzioni del menu aggregati."]
+
+. Gestisci i tuoi aggregati:
++
+[cols="30,70"]
+|===
+| Attività | Azione 
+
+
+| Visualizzare informazioni su un aggregato | Sotto il ... (Icona ellisse), fare clic su *View aggregate details* (Visualizza dettagli aggregati). 
+
+
+| Creare un volume su un aggregato specifico | Sotto il ... (Icona ellisse), fare clic su *Add volume* (Aggiungi volume). 
+
+
+| Aggiungere dischi a un aggregato  a| 
+.. Sotto il ... (Icona ellisse), fare clic su *Aggiungi dischi*.
+.. Selezionare il numero di dischi che si desidera aggiungere e fare clic su *Aggiungi*.
++
+
+TIP: Tutti i dischi di un aggregato devono avere le stesse dimensioni.
+
+
+
+ifdef::aws[]
+
+
+
+| Aumenta la capacità di un aggregato che supporta i volumi elastici di Amazon EBS  a| 
+.. Sotto il ... (Icona ellisse), fare clic su *aumenta capacità*.
+.. Immettere la capacità aggiuntiva che si desidera aggiungere, quindi fare clic su *aumento*.
++
+Si noti che è necessario aumentare la capacità dell'aggregato di un minimo di 256 GiB o del 10% delle dimensioni dell'aggregato.
+
++
+Ad esempio, se si dispone di un aggregato 1.77 TIB, il 10% corrisponde a 181 GiB. Si tratta di un valore inferiore a 256 GiB, pertanto le dimensioni dell'aggregato devono aumentare di almeno 256 GiB.
+
+
+
+endif::aws[]
+
+
+
+| Eliminare un aggregato  a| 
+.. Selezionare una sezione aggregata che non contiene volumi. Fare clic sul pulsante *... (Icona ellisse) > Elimina*.
+.. Fare nuovamente clic su *Delete* per confermare.
+
+
+|===
+

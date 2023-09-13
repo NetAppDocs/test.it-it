@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: task-change-route-tables.html 
+keywords: route tables, update route tables, modify route tables, change route table 
+summary: È possibile modificare le tabelle di routing AWS che includono i percorsi verso gli indirizzi IP mobili per una coppia ha implementata in più zone di disponibilità AWS. È possibile eseguire questa operazione se i nuovi client NFS o CIFS devono accedere a una coppia ha in AWS. 
+---
+= Modificare le tabelle di percorso per le coppie ha in più AZS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+È possibile modificare le tabelle di routing AWS che includono i percorsi verso gli indirizzi IP mobili per una coppia ha implementata in più AWS Availability Zones (AZS). È possibile eseguire questa operazione se i nuovi client NFS o CIFS devono accedere a una coppia ha in AWS.
+
+.Fasi
+. Nella pagina Canvas, selezionare l'ambiente di lavoro.
+. Nella scheda Panoramica, fare clic sul pannello funzioni, quindi fare clic sull'icona a forma di matita accanto a *tabelle di percorso*.
++
+image:screenshot_features_route_tables.png["Una schermata che mostra l'impostazione delle tabelle di percorso nel pannello funzioni disponibile nella parte superiore destra della pagina Panoramica durante la visualizzazione di un ambiente di lavoro."]
+
+. Modificare l'elenco delle tabelle di percorso selezionate, quindi fare clic su *Save* (Salva).
+
+
+.Risultato
+BlueXP invia una richiesta AWS per modificare le tabelle di routing.

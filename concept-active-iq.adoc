@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: concept-active-iq.html 
+keywords: autosupport, active iq, digital advisor, active iq digital advisor, telemetry 
+summary: 'Il componente AutoSupport di ONTAP raccoglie la telemetria e la invia per l"analisi. Il consulente digitale Active IQ analizza i dati di AutoSupport e offre un"assistenza e un"ottimizzazione proattive. Utilizzando l"intelligenza artificiale, Active IQ è in grado di identificare i potenziali problemi e di risolverli prima che influiscano sul tuo business.' 
+---
+= Consulente digitale AutoSupport e Active IQ
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Il componente AutoSupport di ONTAP raccoglie la telemetria e la invia per l'analisi. Il consulente digitale Active IQ analizza i dati di AutoSupport e offre un'assistenza e un'ottimizzazione proattive. Utilizzando l'intelligenza artificiale, Active IQ è in grado di identificare i potenziali problemi e di risolverli prima che influiscano sul tuo business.
+
+Active IQ ti consente di ottimizzare la tua infrastruttura dati nel tuo cloud ibrido globale offrendo analisi predittive e supporto proattivo attraverso un portale basato sul cloud e un'app mobile. Le informazioni e i consigli di Active IQ basati sui dati sono disponibili per tutti i clienti NetApp con un contratto SupportEdge attivo (le funzionalità variano in base al prodotto e al livello di supporto).
+
+Ecco alcune cose che puoi fare con Active IQ:
+
+* Pianificare gli aggiornamenti.
++
+Active IQ identifica i problemi dell'ambiente che possono essere risolti eseguendo l'aggiornamento a una versione più recente di ONTAP e il componente preparazione aggiornamento consente di pianificare un aggiornamento corretto.
+
+* Visualizza lo stato di salute del sistema.
++
+La dashboard di Active IQ segnala eventuali problemi relativi allo stato di salute e ti aiuta a correggerli. Monitorare la capacità del sistema per assicurarsi di non esaurire mai lo spazio di storage. Visualizza i casi di supporto per il tuo sistema.
+
+* Gestire le performance.
++
+Active IQ mostra le performance del sistema in un periodo più lungo di quello che puoi vedere in Gestore di sistema di ONTAP. Identificare i problemi di configurazione e di sistema che influiscono sulle performance.
+Massimizza l'efficienza. Visualizza le metriche di efficienza dello storage e identifica i modi per memorizzare più dati in meno spazio.
+
+* Visualizza l'inventario e la configurazione.
++
+Active IQ visualizza l'inventario completo e le informazioni di configurazione software e hardware. Controlla quando i contratti di servizio stanno per scadere e rinnovarli per assicurarti di rimanere supportati.
+
+
+
+.Informazioni correlate
+* https://docs.netapp.com/us-en/active-iq/["Documentazione NetApp: Consulente digitale Active IQ"^]
+* https://aiq.netapp.com/custom-dashboard/search["Avviare Active IQ"^]
+* https://www.netapp.com/us/services/support-edge.aspx["Servizi SupportEdge"^]
+

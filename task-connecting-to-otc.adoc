@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: task-connecting-to-otc.html 
+keywords: connecting, cli, command, command line, connect, shell, interface 
+summary: 'La CLI di Cloud Volumes ONTAP consente di eseguire tutti i comandi amministrativi ed è una buona scelta per attività avanzate o se si è più comodi nell"utilizzo della CLI. È possibile connettersi all"interfaccia CLI utilizzando SSH.' 
+---
+= Amministrare Cloud Volumes ONTAP dalla CLI
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La CLI di Cloud Volumes ONTAP consente di eseguire tutti i comandi amministrativi ed è una buona scelta per attività avanzate o se si è più comodi nell'utilizzo della CLI. È possibile connettersi all'interfaccia CLI utilizzando Secure Shell (SSH).
+
+.Prima di iniziare
+L'host da cui si utilizza SSH per connettersi a Cloud Volumes ONTAP deve disporre di una connessione di rete a Cloud Volumes ONTAP. Ad esempio, potrebbe essere necessario utilizzare SSH da un host di collegamento nella rete del provider di cloud.
+
+ifdef::aws[]
+
+
+NOTE: Quando vengono implementate in più AZS, le configurazioni Cloud Volumes ONTAP ha utilizzano un indirizzo IP mobile per l'interfaccia di gestione del cluster, il che significa che il routing esterno non è disponibile. È necessario connettersi da un host che fa parte dello stesso dominio di routing.
+
+endif::aws[]
+
+.Fasi
+. In BlueXP, identificare l'indirizzo IP dell'interfaccia di gestione del cluster:
++
+.. Dal menu di navigazione a sinistra, selezionare *Storage > Canvas*.
+.. Nella pagina Canvas, selezionare il sistema Cloud Volumes ONTAP.
+.. Copiare l'indirizzo IP di gestione del cluster visualizzato nel riquadro di destra.
+
+
+. Utilizzare SSH per connettersi all'indirizzo IP dell'interfaccia di gestione del cluster utilizzando l'account admin.
++
+*Esempio*
+
++
+L'immagine seguente mostra un esempio di utilizzo di PuTTY:
+
++
+image:screenshot_cli2.gif["Schermata: Mostra la destinazione admin@192.168.11 sulla porta 22."]
+
+. Al prompt di login, inserire la password per l'account admin.
++
+*Esempio*
+
++
+....
+Password: ********
+COT2::>
+....
+
