@@ -1,14 +1,15 @@
 ---
-jekyll: srd23-stable-11
 settings:
   name: Cloud Volumes ONTAP
   harmony_integration: maestro
   platform: cloud
+  downlevel: true
   internal:
     pdf_enabled: true
   prod:
     pdf_enabled: true
     harmony_enabled: false
+  rss_page: whats-new.html
   versions:
   - name: Cloud Volumes ONTAP
     url: "/cloud-volumes-ontap-relnotes"
@@ -58,7 +59,6 @@ settings:
   - name: Cloud ONTAP
     url: "/cloud-volumes-ontap-93-relnotes"
     version-number: '9.3'
-  rss_page: whats-new.html
   filter:
     label: Cloud provider
     default: Tutti i cloud provider
