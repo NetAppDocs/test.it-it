@@ -15,6 +15,19 @@ NetApp fornisce supporto per BlueXP e i suoi servizi cloud in diversi modi. Sono
 
 
 
+== Ottieni supporto per un file service del cloud provider
+
+Per supporto tecnico relativo a un file service di un cloud provider, alla sua infrastruttura o a una soluzione che utilizza il servizio, fare riferimento a "Guida in linea" nella documentazione BlueXP relativa a quel prodotto.
+
+* link:https://docs.netapp.com/us-en/bluexp-fsx-ontap/start/concept-fsx-aws.html#getting-help["Amazon FSX per ONTAP"^]
+* link:https://docs.netapp.com/us-en/bluexp-azure-netapp-files/concept-azure-netapp-files.html#getting-help["Azure NetApp Files"^]
+* link:https://docs.netapp.com/us-en/bluexp-cloud-volumes-service-gcp/concept-cvs-gcp.html#getting-help["Cloud Volumes Service per Google Cloud"^]
+
+
+Per ricevere supporto tecnico specifico di BlueXP e delle relative soluzioni e servizi storage, utilizza le opzioni di supporto descritte di seguito.
+
+
+
 == Utilizzare le opzioni di supporto automatico
 
 Queste opzioni sono disponibili gratuitamente, 24 ore su 24, 7 giorni su 7:
