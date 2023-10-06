@@ -14,7 +14,7 @@ summary: Alcune configurazioni Cloud Volumes ONTAP includono lo storage NVMe loc
 
 
 [role="lead"]
-Alcune configurazioni Cloud Volumes ONTAP includono lo storage NVMe locale, che Cloud Volumes ONTAP utilizza come _Flash cache_ per migliorare le performance.
+Alcune configurazioni Cloud Volumes ONTAP includono lo storage NVMe locale, che Cloud Volumes ONTAP utilizza come _Flash cache_ per migliorare le performance. Aggiunta di una riga per il test di aggiornamento token.
 
 
 
