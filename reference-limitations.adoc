@@ -42,3 +42,45 @@ link:concept-client-protocols.html["Scopri di più sul supporto Cloud Volumes ON
 BlueXP non fornisce supporto di setup o orchestrazione per il disaster recovery delle Storage VM (SVM). È necessario utilizzare System Manager o la CLI.
 
 link:task-manage-svm-dr.html["Scopri di più sul disaster recovery delle SVM"].
+
+
+
+== Verifica della sostituzione dei caratteri e degli attributi intrinseci di AsciDoc
+
+Test end-to-end attraverso la localizzazione e la pubblicazione di tutte le lingue.
+
+.Asterisco
+{asterisco}
+Testo{Asterisk}
+Testo {Asterisk}
+Testo {Asterisk}
+
+.Due punti
+{due punti}
+Testo{Two-Colons}
+Testo {due punti}
+Testo {Two-Colons}
+
+.Barra verticale
+{vbar}
+Testo{vbar}
+Testo {vbar}
+Testo {vbar}
+
+.E in più
+{plus}
+Testo{Plus}
+Testo {Plus}
+Testo {Plus}
+
+.Staffe quadrate
+{startsb} e {endsb}
+Text{startsb} e text{endsb}
+Testo {startsb} e testo {endsb}
+Testo {startsb} e testo {endsb}
+
+.Spazio senza interruzioni
+Prima{nbsp}dopo
+
+.Spazio a larghezza zero
+Prima{zwsp}dopo
