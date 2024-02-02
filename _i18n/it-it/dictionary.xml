@@ -1469,7 +1469,6 @@ In caso di interruzione, i dati devono essere disponibili entro 120 secondi al m
   <block id="e3cd99e4aa330ae6bdfb3754d83ae962" category="list-text">Se disponi di un account partner o reseller, puoi aggiungere uno o più account NSS, ma non possono essere aggiunti insieme agli account a livello di cliente.</block>
   <block id="c0e0b7ff0de9558404e9b77ece42948a" category="list-text">Selezionare *Gestione NSS &gt; Aggiungi account NSS*.</block>
   <block id="85b9386ed443776127e099931d73448a" category="list-text">Quando richiesto, selezionare *continua* per essere reindirizzato a una pagina di accesso Microsoft.</block>
-  <block id="19d089db572ee6a1e154a0c9c9e57bfd" category="paragraph">NetApp utilizza Microsoft Azure Active Directory come provider di identità per i servizi di autenticazione specifici per il supporto e la concessione di licenze.</block>
   <block id="465ec6d5eafa3524c948c99d8bfcd306" category="list-text">Nella pagina di accesso, fornire l'indirizzo e-mail e la password registrati del NetApp Support Site per eseguire il processo di autenticazione.</block>
   <block id="cbc6cc3bb022583403171b447b2a962c" category="paragraph">Queste azioni consentono a BlueXP di utilizzare il tuo account NSS per download di licenze, verifica dell'aggiornamento software e registrazioni di supporto future.</block>
   <block id="ec084bb25ed5b934c09b361069c246b2" category="list-text">L'account NSS deve essere un account a livello di cliente (non un account guest o temporaneo). Puoi avere più account NSS a livello di cliente.</block>
@@ -5184,4 +5183,5 @@ Testo {startsb} e testo {endsb}</block>
   <block id="f606f03b9471e3c22a0e9412852320bd" category="paragraph">Prima{nbsp}dopo</block>
   <block id="64e9073b4fb50b91766ce8b5e61945c1" category="paragraph-title">Spazio a larghezza zero</block>
   <block id="589a92e5ac7fd2654f5ce5d9594f5e7c" category="paragraph">Prima{zwsp}dopo</block>
+  <block id="d59e0b46782e48a01966e5c7ccc38d17" category="paragraph">NetApp utilizza Microsoft Entra ID come provider di identità per i servizi di autenticazione specifici per il supporto e la licenza.</block>
 </blocks>
