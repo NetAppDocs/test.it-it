@@ -1,0 +1,3515 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head class="at-element-marker">
+  <title>Requisiti di rete per Cloud Volumes ONTAP in Azure | NetApp Documentation</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Requisiti di rete per Cloud Volumes ONTAP in Azure | NetApp Documentation" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://docs.netapp.com/it-it/test/reference-networking-azure.html" />
+	<meta property="og:description" content="Configura la tua rete Azure in modo che i sistemi Cloud Volumes ONTAP possano funzionare correttamente." />
+  <meta property="og:image" content="https://docs.netapp.com/it-it/test/images/logo-tophat-social.png" />
+  <meta property="og:image:alt" content="NetApp Logo" />
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="encoding" content="utf-8">
+  <meta http-equiv="nss-type" content="Product Documentation"/>
+  <meta http-equiv="nss-subtype" content="User Guide"/><meta name="description" content="Configura la tua rete Azure in modo che i sistemi Cloud Volumes ONTAP possano funzionare correttamente.">
+  <meta name="keywords" content=" networking, network, requirements, connection, connections, vnet, security group, security groups, subnet, vpn, internet, proxy, HTTP, private, proxy server, routing, firewall, autosupport, connection, jump host, outbound, ports, blob, service endpoint"><!-- Icons -->
+  <link rel="icon" href="/it-it/test/images/favicon.ico" type="image/x-icon">
+
+  <!-- RSS Feed --><link rel="alternate" type="application/rss+xml" title="NetApp Documentation" href="/it-it/test/feed.xml"><!-- CSS Definitions: NetApp CSS should be defined after generic css -->
+
+
+  <!-- Combined CSS -->
+  <link rel="stylesheet" type="text/css" href="/it-it/test/css/ie-netappdocs.css">
+
+  
+  <link rel="stylesheet" href="/it-it/test/css/ie-landing-page.css" type="text/css">
+  <link rel="stylesheet" href="/it-it/test/css/ie-tabbed-blocks.css" type="text/css">
+  <!-- Canonical url -->
+  <link rel="canonical" href="https://docs.netapp.com/it-it/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.netapp.com/us-en/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="it" href="https://docs.netapp.com/it-it/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="en" href="https://docs.netapp.com/us-en/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="ja" href="https://docs.netapp.com/ja-jp/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="ko" href="https://docs.netapp.com/ko-kr/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.netapp.com/zh-cn/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://docs.netapp.com/zh-tw/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="de" href="https://docs.netapp.com/de-de/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="es" href="https://docs.netapp.com/es-es/test/reference-networking-azure.html" />
+  <link rel="alternate" hreflang="fr" href="https://docs.netapp.com/fr-fr/test/reference-networking-azure.html" />
+  <!-- Top level site integrations -->
+<script type="text/javascript" src="https://cdn.cookielaw.org/consent/72570c5c-fe30-465f-b0e0-b77f7fb4ae34/OtAutoBlock.js"></script>
+    <script type="text/javascript" src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="72570c5c-fe30-465f-b0e0-b77f7fb4ae34"></script>
+    <script type="text/javascript">function OptanonWrapper() { }</script>
+    <script type="text/plain" class="optanon-category-C0002" src="https://assets.adobedtm.com/60287eadf1ee/c284da483c83/launch-e9ff3acac59f.min.js"></script>
+    <script class="optanon-category-C0001">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.setAttributeNode(d.createAttribute('data-ot-ignore'));j.setAttribute('class','optanon-category-C0001');j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'';f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MD73T9M');</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      const MASTHEAD_OFFSET = 65;
+      const SECTIONS = $("main h2, main h3");
+      // PAGE NAV - Init
+      if (SECTIONS.length == 0) {
+        // remove if there is no elements
+        /*
+        $("#ie-right-navbar").remove();
+        $("#ie-right-navbar-collapse").remove();
+        */
+      } else {
+        $(".page-nav-title").css('display', 'block');
+        for (var i = 0; i < SECTIONS.length; i++) {
+          var sectionId = $(SECTIONS[i]).attr('id');
+          var sectionName = $(SECTIONS[i]).text();
+          var subClass = $(SECTIONS[i]).is("h3") ? ' page-nav__sublink' : '';
+          $("#page-menu").append('<li class="page-nav-item"><a href="#' + sectionId + '" class="page-nav__link' + subClass + '">' + sectionName + '</a></li>');
+        }
+      }
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- Used for Product Family Page Sidebar Visibility --><!-- Used to import Promise for IE. Required for SearchKit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script><script src='/it-it/test/js/na-search.js'></script><script src='/it-it/test/js/ie-clouddocs.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script>
+    /*
+      $(document).ready(function() {
+          $("#tg-sb-link").click(function() {
+              $("#tg-sb-sidebar").toggle();
+              $("#tg-sb-content").toggleClass('col-md-9');
+              $("#tg-sb-content").toggleClass('col-md-12');
+              $("#tg-sb-icon").toggleClass('fa-toggle-on');
+              $("#tg-sb-icon").toggleClass('fa-toggle-off');
+          });
+      });
+      */
+  </script>
+  <script src='/it-it/test/js/custom-dropdown.js'></script>
+  <script src='/it-it/test/js/FileSaver.min.js'></script>
+  <script src='/it-it/test/js/jszip-utils.min.js'></script>
+  <script src='/it-it/test/js/jszip.min.js'></script><script src='/it-it/test/js/ie-pdf-ux.js'></script></head>
+
+
+  <body class role="document" data-flavor="azure">
+    <div class="skip-to-main">
+      <a href="#main" >Skip to main content</a>
+    </div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MD73T9M"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="page" class="">
+      <div id="ie-phone-menu" class=""></div>
+      <div id="ie-content-wrap" class="">
+        <nav id="ie-new-header">
+    <ul>
+        <li id="ie-phone-menu-button">
+            <a href="#">
+                <image id="" src="/it-it/test/images/hamburger.svg" alt="menu" />
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.netapp.com/it">
+                <image id="ie-header-logo" src="/it-it/test/images/netapp_logo.svg" alt="netapp" />
+            </a>
+        </li>
+        <li id="ie-header-docs">
+            <a href="https://www.netapp.com/it/support-and-training/documentation/">Documenti</a>
+        </li>
+
+        <!-- Empty container to push header left with or without lang selector -->
+        <li id="empty-container" style="margin-left: auto">
+        </li>
+        <!-- Start Language Selector --><li id="ie-language-dropdown">
+            <div id="language-dropdown" class="custom-dropdown custom-dropdown-lang">
+                <div class="custom-dropdown-select custom-dropdown-select-lang">
+                    <img src="/it-it/test/images/language_white_24dp.svg" class="n-globe__icon" />
+                    <span class="lang-name">Italiano</span>
+                    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu"><li>
+                        <a href="https://docs.netapp.com/it-it/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">Italiano</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/us-en/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">English</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ja-jp/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">日本語</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ko-kr/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">한국어</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-cn/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">简体中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-tw/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">繁體中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/de-de/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">Deutsch</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/es-es/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">Español</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/fr-fr/test/reference-networking-azure.html"
+                            target="_self"><span translate="no" class="notranslate">Français</span></a>
+                    </li></ul>
+            </div>
+            </li>
+        <!-- End Language Selector -->
+
+
+        <li id="ie-allnetapp">
+            <div id="allnetapp-dropdown" class="custom-dropdown custom-dropdown-allnetapp">
+                <div class="custom-dropdown-select custom-dropdown-select-allnetapp">
+                    <img src="/it-it/test/images/apps_white_24dp.svg" alt="" class="allnetapp-icon" />
+                    <span class="allnetapp-name">Tutto NetApp</span>
+                    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu allnetapp-dropdown">
+                    <li>
+                        <a href="https://bluexp.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">BlueXP</span></a>
+                    </li>
+                    <li>
+                        <a href="https://mysupport.netapp.com/site/"
+                            target="_self"><span translate="no" class="notranslate">Supporto</span></a>
+                    </li>
+                    <li>
+                        <a href="https://kb.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">Knowledge Base</span></a>
+                    </li>
+                    <li>
+                        <a href="https://www.netapp.com/it/support-and-training/netapp-learning-services/"
+                            target="_self"><span translate="no" class="notranslate">Training</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+
+    </ul>
+</nav>
+
+        <main id="n-main-content" class="n-main-content">
+          <!-- Start Documentation Content -->
+<div class="ie-main">
+
+<div id="ie-new-sidebar-collapse" style="display: none">
+    <img id="sidebar-expand" class="ie-searchbox-icon" src="/it-it/test/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-new-sidebar">
+    <div id="ie-product-identity-lockup">
+        <div id="sidebar-collapse" class="">
+            <img src="/it-it/test/images/double_arrow.svg" alt="" />
+        </div>
+        <div id="ie-breadcrumb" class="">
+  <ul class="ie-breadcrumb">
+    <li class="">
+      <a href="https://docs.netapp.com">Tutti i documenti</a>
+    </li>
+    
+    
+    <li class="">
+      <a href="https://docs.netapp.com/us-en/cloud/">Documentazione Cloud</a>
+    </li>
+    
+
+    
+    <li class="">
+      <a href="https://docs.netapp.com/it-it/bluexp-family/">
+        BlueXP
+      </a>
+    </li>
+    
+  </ul>
+  
+  <div class="ie-product-name" >
+    <!--<a href="/it-it/test/">-->
+      Cloud Volumes ONTAP
+    <!--</a>-->
+  </div>
+</div>
+
+            
+<div id="ie-selectors"><div id="version-dropdown-new" class="custom-dropdown" >
+  <div class="custom-dropdown-select unselected" title=" 9.13.1">
+    <label>Versione</label>
+    <span translate="no" class="notranslate">9.13.1</span>
+    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown version invisible" />
+    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup version" />
+  </div>
+
+  <ul class="custom-dropdown-menu"><li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.13.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9130-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.13.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9121-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.12.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9120-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.12.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9111-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.11.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9110-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.11.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9101-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.10.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-9100-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.10.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-991-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.9.1</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-990-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.9.0</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-98-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.8</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-97-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.7</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-96-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.6</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-95-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.5</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-94-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.4</span></span>
+      </a>
+                     
+    </li>
+    <li>
+      
+      <a href="https://docs.netapp.com/it-it/cloud-volumes-ontap-93-relnotes/reference-networking-azure.html" target="_self">
+        <span translate="no" class="notranslate"><span class="version"> 9.3</span></span>
+      </a>
+                     
+    </li>
+    
+  </ul>
+</div>
+<div id="flavor-dropdown" class="custom-dropdown" data-url="/it-it/test/reference-networking-azure.html">
+  
+  
+  <div class="custom-dropdown-select selected" title="Azure">
+    <label>Cloud provider</label>
+    <div>Azure</div>  
+    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown flavor invisible" />
+    <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup flavor" />
+    <!--<img src="/it-it/test/images/dismiss.svg" class="custom-icon selected" id="remove-flavor" alt="" />-->
+  </div>
+  
+
+  <ul class="custom-dropdown-menu">
+    
+    
+    <li data-value="aws" data-url="/it-it/test/aws">Amazon Web Services</li>
+    
+    
+    
+    <li data-value="gcp" data-url="/it-it/test/gcp">Google Cloud</li>
+    
+    
+    
+    <li data-value="azure" data-url="/it-it/test/azure/reference-networking-azure.html">Microsoft Azure
+    </li>
+    
+    
+    <li data-url="/it-it/test/reference-networking-azure.html">Tutti i cloud provider</li>
+  </ul>
+</div>
+</div>
+        
+        
+
+<div id="ie-searchbox" class="ie-searchbox-sidebar ">
+    <img class="ie-searchbox-icon" src="/it-it/test/images/loupe.svg" alt=""/>
+    <div id="react-search" 
+        data-search-html="/it-it/test/azure/search.html" 
+        data-type="widget"
+        data-placeholder="Esplora la documentazione"
+        data-no-results-found="Nessun risultato per {query}"
+        data-did-you-mean="Cerca {suggestion}."
+        data-no-results-found-did-you-mean="Nessun risultato per {query}. Intendi {suggestion}?"
+        data-results-found="{hitCount} risultati trovati"
+        data-error-message="Si è verificato un errore. Riprova."
+        data-error-reset="Reimposta ricerca"
+        data-sk-es-pf-indexes="" 
+        data-flavor="azure">
+    </div>
+</div>
+        
+    </div>
+    <div id="ie-new-toc"><script>
+  let sidebarAccordion = true;
+
+  /* specific css rules for Mac */
+  if(navigator.platform.match('Mac') !== null) {
+    document.body.setAttribute('class', 'OSX');
+  }
+
+</script>
+
+<div id="ie-sidebar-container">
+  <ul id="ie-sidebar-list" ><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Documenti Cloud Volumes ONTAP"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/index.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/it-it/test/azure/index.html">
+        Documenti Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Note di rilascio"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Note di rilascio</div>-->
+         Note di rilascio
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Novità"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/whats-new.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/whats-new.html">
+        Novità
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Limitazioni note"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/reference-limitations.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/reference-limitations.html">
+        Limitazioni note
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Note di rilascio di Cloud Volumes ONTAP"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/whats-new-ontap.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/whats-new-ontap.html">
+        Note di rilascio di Cloud Volumes ONTAP
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inizia subito"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Inizia subito</div>-->
+         Inizia subito
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scopri di più su Cloud Volumes ONTAP"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-overview-cvo.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-overview-cvo.html">
+        Scopri di più su Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Versioni supportate per le nuove implementazioni"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/reference-versions.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/reference-versions.html">
+        Versioni supportate per le nuove implementazioni
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Inizia a utilizzare Microsoft Azure"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Inizia a utilizzare Microsoft Azure</div>-->
+         Inizia a utilizzare Microsoft Azure
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Avvio rapido"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-getting-started-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-getting-started-azure.html">
+        Avvio rapido
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Pianificare la configurazione"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-planning-your-config-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-planning-your-config-azure.html">
+        Pianificare la configurazione
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurare la rete"
+      data-li-level="3#" 
+      class="  ie-sidebar-selected    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/reference-networking-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/reference-networking-azure.html">
+        Configurare la rete
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Impostare la crittografia utilizzando la chiave"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-set-up-azure-encryption.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-set-up-azure-encryption.html">
+        Impostare la crittografia utilizzando la chiave
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Impostare la licenza"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-set-up-licensing-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-set-up-licensing-azure.html">
+        Impostare la licenza
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Attivare la modalità ad alta disponibilità"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-azure-high-availability-mode.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-azure-high-availability-mode.html">
+        Attivare la modalità ad alta disponibilità
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Avviare Cloud Volumes ONTAP in Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-deploying-otc-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-deploying-otc-azure.html">
+        Avviare Cloud Volumes ONTAP in Azure
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="USA Cloud Volumes ONTAP"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> USA Cloud Volumes ONTAP</div>-->
+         USA Cloud Volumes ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione delle licenze"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Gestione delle licenze</div>-->
+         Gestione delle licenze
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione delle licenze basate sulla capacità"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-capacity-licenses.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-capacity-licenses.html">
+        Gestione delle licenze basate sulla capacità
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestisci gli abbonamenti Keystone"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-keystone.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-keystone.html">
+        Gestisci gli abbonamenti Keystone
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestire le licenze basate su nodo"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-node-licenses.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-node-licenses.html">
+        Gestire le licenze basate su nodo
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione di volumi e LUN"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Amministrazione di volumi e LUN</div>-->
+         Amministrazione di volumi e LUN
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Creare volumi"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-create-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-create-volumes.html">
+        Creare volumi
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestire i volumi esistenti"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-volumes.html">
+        Gestire i volumi esistenti
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mettere a livello i dati inattivi sullo storage a oggetti"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-tiering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-tiering.html">
+        Mettere a livello i dati inattivi sullo storage a oggetti
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Collegare un LUN a un host"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-connect-lun.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-connect-lun.html">
+        Collegare un LUN a un host
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Accelera l'accesso ai dati con FlexCache"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-accelerate-data-access.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-accelerate-data-access.html">
+        Accelera l'accesso ai dati con FlexCache
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione degli aggregati"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Amministrazione degli aggregati</div>-->
+         Amministrazione degli aggregati
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Creare aggregati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-create-aggregates.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-create-aggregates.html">
+        Creare aggregati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestire gli aggregati esistenti"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-aggregates.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-aggregates.html">
+        Gestire gli aggregati esistenti
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestire le impostazioni di capacità"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-capacity-settings.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-capacity-settings.html">
+        Gestire le impostazioni di capacità
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione delle macchine virtuali dello storage"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Amministrazione delle macchine virtuali dello storage</div>-->
+         Amministrazione delle macchine virtuali dello storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Lavorare con le VM di storage in BlueXP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-managing-svms.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-managing-svms.html">
+        Lavorare con le VM di storage in BlueXP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Creazione di macchine virtuali storage in Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-managing-svms-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-managing-svms-azure.html">
+        Creazione di macchine virtuali storage in Azure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurare il disaster recovery delle SVM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-manage-svm-dr.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-manage-svm-dr.html">
+        Configurare il disaster recovery delle SVM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sicurezza e crittografia dei dati"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Sicurezza e crittografia dei dati</div>-->
+         Sicurezza e crittografia dei dati
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Crittografare i volumi con la crittografia NetApp"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-encrypting-volumes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-encrypting-volumes.html">
+        Crittografare i volumi con la crittografia NetApp
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestisci le chiavi con Azure Key Vault"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-azure-key-vault.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-azure-key-vault.html">
+        Gestisci le chiavi con Azure Key Vault
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Migliorare la protezione ransomware"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-protecting-ransomware.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-protecting-ransomware.html">
+        Migliorare la protezione ransomware
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione del sistema"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Amministrazione del sistema</div>-->
+         Amministrazione del sistema
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Aggiornare Cloud Volumes ONTAP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-updating-ontap-cloud.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-updating-ontap-cloud.html">
+        Aggiornare Cloud Volumes ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Registra i sistemi pay-as-you-go"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-registering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-registering.html">
+        Registra i sistemi pay-as-you-go
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Arrestare e avviare un sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-managing-state.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-managing-state.html">
+        Arrestare e avviare un sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sincronizzare l'ora del sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-sync-time.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-sync-time.html">
+        Sincronizzare l'ora del sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Modificare la velocità di scrittura del sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-modify-write-speed.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-modify-write-speed.html">
+        Modificare la velocità di scrittura del sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Modificare la password di sistema"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-change-password.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-change-password.html">
+        Modificare la password di sistema
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Aggiungere, rimuovere o eliminare sistemi"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Aggiungere, rimuovere o eliminare sistemi</div>-->
+         Aggiungere, rimuovere o eliminare sistemi
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Aggiungere un sistema esistente"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-adding-systems.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-adding-systems.html">
+        Aggiungere un sistema esistente
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Rimuovere un ambiente di lavoro"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-removing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-removing.html">
+        Rimuovere un ambiente di lavoro
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Eliminare un sistema"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-deleting-working-env.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-deleting-working-env.html">
+        Eliminare un sistema
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione di Azure"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Amministrazione di Azure</div>-->
+         Amministrazione di Azure
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Modificare il tipo di Azure VM"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-change-azure-vm.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-change-azure-vm.html">
+        Modificare il tipo di Azure VM
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Eseguire l'override dei blocchi CIFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-overriding-cifs-locks.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-overriding-cifs-locks.html">
+        Eseguire l'override dei blocchi CIFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilizzare un collegamento privato Azure o endpoint del servizio"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-enabling-private-link.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-enabling-private-link.html">
+        Utilizzare un collegamento privato Azure o endpoint del servizio
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Spostare i gruppi di risorse"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-moving-resource-groups-azure.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/it-it/test/azure/task-moving-resource-groups-azure.html">
+        Spostare i gruppi di risorse
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione da System Manager"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-administer-advanced-view.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-administer-advanced-view.html">
+        Amministrazione da System Manager
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Amministrazione dalla CLI"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-connecting-to-otc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-connecting-to-otc.html">
+        Amministrazione dalla CLI
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Stato ed eventi del sistema"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Stato ed eventi del sistema</div>-->
+         Stato ed eventi del sistema
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verificare l'installazione di AutoSupport"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-verify-autosupport.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-verify-autosupport.html">
+        Verificare l'installazione di AutoSupport
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurare EMS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-configure-ems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/task-configure-ems.html">
+        Configurare EMS
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Concetti"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Concetti</div>-->
+         Concetti
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Licensing"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-licensing.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-licensing.html">
+        Licensing
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Storage"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Storage</div>-->
+         Storage
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protocolli client"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-client-protocols.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-client-protocols.html">
+        Protocolli client
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dischi e aggregati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-storage.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-storage.html">
+        Dischi e aggregati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tiering dei dati"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-data-tiering.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-data-tiering.html">
+        Tiering dei dati
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione dello storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-storage-management.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-storage-management.html">
+        Gestione dello storage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Velocità di scrittura"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-write-speed.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-write-speed.html">
+        Velocità di scrittura
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Flash cache"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-flash-cache.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-flash-cache.html">
+        Flash cache
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Storage WORM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-worm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-worm.html">
+        Storage WORM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Coppie ad alta disponibilità"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Coppie ad alta disponibilità</div>-->
+         Coppie ad alta disponibilità
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="COPPIE HA in Azure"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-ha-azure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-ha-azure.html">
+        COPPIE HA in Azure
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Azioni durante l'acquisizione dello storage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-degraded-ha-pair.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/it-it/test/azure/concept-degraded-ha-pair.html">
+        Azioni durante l'acquisizione dello storage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sicurezza"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-security.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-security.html">
+        Sicurezza
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Performance"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-performance.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-performance.html">
+        Performance
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestione del BYOL basato su nodo"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-license-management.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-license-management.html">
+        Gestione del BYOL basato su nodo
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Consulente digitale AutoSupport e Active IQ"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/concept-active-iq.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/concept-active-iq.html">
+        Consulente digitale AutoSupport e Active IQ
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configurazioni predefinite"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/reference-default-configs.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/reference-default-configs.html">
+        Configurazioni predefinite
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conoscenza e supporto"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/it-it/test/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/it-it/test/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Conoscenza e supporto</div>-->
+         Conoscenza e supporto
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Registrati per ricevere assistenza"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-support-registration.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/task-support-registration.html">
+        Registrati per ricevere assistenza
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Richiedi assistenza"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/task-get-help.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/it-it/test/azure/task-get-help.html">
+        Richiedi assistenza
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Note legali"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/reference-networking-azure.html" 
+      dale-entry-url="/legal-notices.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/it-it/test/azure/legal-notices.html">
+        Note legali
+      </a></li></ul>
+</div>
+<script>
+
+  $(".ie-sidebar-button").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    expandedLI = $('li.ie-sidebar-expand')
+
+    const li = $(this).closest("li");
+
+    const parentsLI = $(li).parents('li');
+
+    expandedLI.map(element => {
+      if (sidebarAccordion && !li.hasClass('ie-sidebar-expand') && jQuery.inArray(expandedLI[element], parentsLI) == -1) {
+        $(expandedLI[element]).toggleClass('ie-sidebar-expand');
+        $(expandedLI[element]).children("ul").animate({ height: 'toggle' }, 400, function () {
+          $(li).children("ul").toggleClass('ie-sidebar-open');
+
+        })
+      }
+
+    })
+
+    $(li).toggleClass('ie-sidebar-expand');
+    $(li).children("ul").animate({ height: 'toggle' }, 400, function () {
+      $(li).children("ul").toggleClass('ie-sidebar-open');
+    })
+  });
+
+
+  
+    $("li.ie-sidebar-selected").parents('ul').toggleClass("ie-sidebar-open");
+    $("li.ie-sidebar-selected").toggleClass("ie-sidebar-expand")
+    $("ul.ie-sidebar-open").parent().toggleClass("ie-sidebar-expand");
+    $("li.ie-sidebar-selected").children('ul').toggleClass("ie-sidebar-open")
+  
+  
+</script>
+    </div>
+</div>
+<script>
+
+    
+    let sidebarScrollTopPosition = 0;
+    $("#ie-new-toc").on("scroll", function () {
+        if (sidebarScrollTopPosition == 0) {
+            $.cookie("sidebarScroll", $("#ie-new-toc").scrollTop(), {
+                path: "/it-it/test"
+            });
+        }
+
+        if ($("#ie-new-toc").scrollTop() > 0) {
+            $('#ie-product-identity-lockup').addClass('ie-addShadow');
+        } else {
+            $('#ie-product-identity-lockup').removeClass('ie-addShadow');
+        }
+    });
+
+    $(function () {
+        if ($.cookie("sidebarScroll")) {
+            $("#ie-new-toc").scrollTop($.cookie("sidebarScroll"));
+        }
+    });
+
+    function setSidebarBottom() {
+        const footerGap = PXinViewport($(".n-footer"));
+        document.getElementById("ie-new-sidebar").style.bottom = Math.max(0, footerGap) + "px";
+    }
+
+    window.onscroll = () => {
+        setSidebarBottom();
+    };
+
+    $("#sidebar-collapse").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        if ($.cookie("sidebarScroll")) {
+            sidebarScrollTopPosition = $.cookie("sidebarScroll");
+        }
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 350, function () {
+            $("#ie-new-sidebar-collapse").show();
+            $("#ie-new-sidebar").removeClass("open")
+            $("#ie-new-sidebar").addClass("close")
+            $("#ie-new-sidebar").removeAttr("style")
+        });
+        $(".ie-content-pane").animate({ width: (width + sidebarWidth), marginLeft: (marginLeft - sidebarWidth) }, 350, function () {
+            resizeContent()
+        })
+
+    });
+    $("#sidebar-expand").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 250, function () {
+            $('#ie-new-sidebar').css('display', 'flex');
+            $("#ie-new-sidebar-collapse").hide();
+            $("#ie-new-sidebar").removeClass("close")
+            $("#ie-new-sidebar").addClass("open")
+            setSidebarBottom();
+
+            if (sidebarScrollTopPosition != 0) {
+                $.cookie("sidebarScroll", sidebarScrollTopPosition, {
+                    path: "/it-it/test"
+                })
+                $("#ie-new-toc").scrollTop(sidebarScrollTopPosition);
+                sidebarScrollTopPosition = 0;
+            }
+        });
+        $(".ie-content-pane").animate({ width: (width - sidebarWidth), 'marginLeft': (marginLeft + sidebarWidth) }, 250, function () {
+            resizeContent()
+        })
+    });
+    function resizeContent() {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        const rightNavbarVisible =  $("#ie-right-navbar").css('display') && $("#ie-right-navbar").css('display') != 'none';
+        const sidebarVisible = $("#ie-new-sidebar").css('display') != 'none';
+        const rightNavbarWidth = $("#ie-right-navbar").width();
+        const rightNavbarCollapseWidth = $("#ie-right-navbar-collapse").width();
+        const rightNavbarCollapseVisible = $("#ie-right-navbar-collapse").css('display') && $("#ie-right-navbar-collapse").css('display') != 'none';
+        
+        if (rightNavbarVisible && sidebarVisible) {
+            $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarWidth}px)`)
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+        } else if (sidebarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarCollapseWidth}px)`)
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar").width()}px)`)
+            }
+
+        } else if (rightNavbarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            $(".ie-content-pane").width(`calc(100% - ${rightNavbarWidth}px)`)
+        } else {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${rightNavbarCollapseWidth}px)`);
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar-collapse").width()}px) `);
+            }
+            
+        }
+    }
+    $(window).on("resize load", function () {
+        setSidebarBottom();
+        resizeContent()
+    });
+
+
+</script>
+
+<div class="ie-content-pane ie-component-detail-content ie-component-detail-content--show-code">
+    <!-- Begin of page container --><article class="page-content" id="main">
+      <!-- include utility.html -->
+      <div class="ie-info-disclaimer">
+    <span>
+      <div class="ie-info-disclaimer-container">
+        <div class="ie-info-disclaimer-icon">
+          <img src="/it-it/test/images/notification-icons.svg" class="luci-icon" alt="" />
+        </div>
+        <div class="ie-info-disclaimer-content">
+          <span> La versione in lingua italiana fornita proviene da una traduzione automatica. Per eventuali incoerenze, fare riferimento alla versione in lingua inglese. </span>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    </span>
+  </div><div class="ie-component-detail-heading-wrap">
+  <h1 class="ie-component-detail-heading">Requisiti di rete per Cloud Volumes ONTAP in Azure</h1>
+</div>
+
+<div id="ie-byline">
+  
+<div class="page-details">
+    
+        
+            <time datetime="2023-09-13 15:07:51 +0000">09/13/2023</time>
+        
+    
+    
+        <span>Collaboratori
+        </span>
+    
+    
+</div>
+<div class="page-controls">
+    <div id="contribute-dropdown" class="custom-dropdown custom-dropdown-contrib" >
+        <div class="custom-dropdown-select custom-dropdown-select-contrib">
+        <span class="contrib-name"><img src="/it-it/test/images/discuss-sm.svg" alt="" class="github-icon" />Suggerisci modifiche</span>
+        <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown invisible" />
+        <img src="/it-it/test/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup" />
+        </div>
+        <ul class="custom-dropdown-menu suggested-changes-dropdown"><li>
+                <a target="_blank" href="https://github.com/NetAppDocs/test.it-it/issues/new?template=new-from-page.yml&page-url=https://docs.netapp.com/it-it/test/reference-networking-azure.html&page-title=Requisiti di rete per Cloud Volumes ONTAP in Azure" class="page-nav-contribute-link" role="button">Richiedi modifiche alla documentazione</a>
+            </li><li> 
+                <a target="_blank" href="https://github.com/NetAppDocs/test/blob/main/reference-networking-azure.adoc" class="page-nav-contribute-link" role="button">Modifica questa pagina</a>
+            </li><li><a target="_blank" href="https://docs.netapp.com/us-en/contribute/" class="page-nav-contribute-link"  >Scopri come collaborare</a></li>
+        </ul>
+    </div>
+    <div id="pdf-control-container">
+        <div class="n-pdf-header">
+            <a id="toggleButtonPdf" class="n-pdf-button" type="button">
+                <img class="adobe-icon" src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>PDF<img src="/it-it/test/images/dropdown-arrow.svg" class="custom-icon" alt="" />
+            </a>
+        </div>
+        <div class="n-pdf-body-container">
+            <ul id="toggleContainerPdf" class="n-pdf-body" style="display:none;"><li class="pdf-ux-container">
+                    
+                    
+                    
+                    <a target="_blank" class="pdf-download-link" href="/it-it/test/pdfs/azure/fullsite-sidebar/Documentazione_Cloud_Volumes_ONTAP.pdf" >
+                    <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>PDF del sito di questa documentazione</a>
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Note_di_rilascio.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Note di rilascio
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Inizia_subito.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Inizia subito
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Inizia_con_Amazon_Web_Services.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Inizia con Amazon Web Services
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Configurare_la_rete.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configurare la rete
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Inizia_a_utilizzare_Microsoft_Azure.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Inizia a utilizzare Microsoft Azure
+          </a>
+          
+
+
+
+
+    <ul class="subfolders" id="pdf-remove" style="display:none;"><li class="active"></li></ul>
+  
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Inizia_a_utilizzare_Google_Cloud.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Inizia a utilizzare Google Cloud
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Verifica_dell_immagine_della_piattaforma_Google_Cloud.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Verifica dell'immagine della piattaforma Google Cloud
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Verifica_della_firma_dell_immagine.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Verifica della firma dell'immagine
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/USA_Cloud_Volumes_ONTAP.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            USA Cloud Volumes ONTAP
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Gestione_delle_licenze.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Gestione delle licenze
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_di_volumi_e_LUN.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione di volumi e LUN
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_degli_aggregati.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione degli aggregati
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_delle_macchine_virtuali_dello_storage.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione delle macchine virtuali dello storage
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Sicurezza_e_crittografia_dei_dati.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Sicurezza e crittografia dei dati
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_del_sistema.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione del sistema
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Aggiungere__rimuovere_o_eliminare_sistemi.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Aggiungere, rimuovere o eliminare sistemi
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_di_AWS.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione di AWS
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_di_Azure.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione di Azure
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Amministrazione_di_Google_Cloud.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Amministrazione di Google Cloud
+          </a>
+          
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Stato_ed_eventi_del_sistema.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Stato ed eventi del sistema
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Concetti.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Concetti
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Storage.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Storage
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Coppie_ad_alta_disponibilità.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Coppie ad alta disponibilità
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/it-it/test/pdfs/azure/sidebar/Conoscenza_e_supporto.pdf" 
+            
+          >
+            <img src="/it-it/test/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Conoscenza e supporto
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+</li></ul>
+            <div class="zip-pdf-link-container" style="display: none;">   
+                <a href="#" id="zipPdf">
+                <img src="/it-it/test/images/pdf-zip.png" alt="" width="16" height="16"/>
+                <pre>Raccolta di documenti PDF separati<span class="zip-size"></span></pre>
+                </a><div id="zip-link-popup" class="hide">
+    <div class="inner-modal">
+        <div class="downloading-progress">
+            <div class="spinner"></div>
+            <h1>Creating your file...</h1>
+            <div>This may take a few minutes. Thanks for your patience.</div>
+            <button class="cancel-download-btn" type="button">Cancel</button>
+        </div>
+        <div class="download-complete hide">
+            <div class="done-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+            </div>
+            <div>Your file is ready</div>
+            <button class="cancel-download-btn" type="button">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".cancel-download-btn").click(function(){
+        $("#zip-link-popup").addClass("hide");
+        $("#zip-link-popup .downloading-progress").removeClass("hide");
+        $("#zip-link-popup .download-complete").addClass("hide");
+    });
+</script></div>
+        </div>
+    </div>        
+<script>
+$("#toggleContainerPdf li.active:last-child").parents('ul.subfolders').toggle('display');
+$("#toggleButtonPdf").on('click', function(e){ 
+    e.stopPropagation();
+    $("#toggleContainerPdf").toggle('display');
+    $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+});
+
+//hide is by clicking outside pdfcontainer
+$(document).on('click', function (e) {
+    if ($('#toggleContainerPdf').is(':visible') && !$('.n-pdf-body-container').is(e.target) && !$('.n-pdf-body-container').has(e.target).length)  {
+        
+        $("#toggleContainerPdf").toggle('display');
+        $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+        $("#toggleButtonPdf").removeClass("active");
+    }
+});
+</script>
+<script>
+    function getPdfLocation() {
+        const pdfLocation = window.scrollX + document.querySelector('#pdf-control-container').getBoundingClientRect().left
+        if (pdfLocation < 450) {
+            $(".n-pdf-body-container").addClass("block")
+        } else {
+            $(".n-pdf-body-container").removeClass("block")
+        }
+    
+    }
+    $( window ).on( "resize", function() {
+        getPdfLocation()
+} );
+</script>
+<script>
+    const pdfButtonWidth =  $(".n-pdf-header").width();
+    const pdfMenuWidth = $(".n-pdf-body-container").width();
+    $(".n-pdf-body-container").css('margin-left', `calc(${pdfButtonWidth - pdfMenuWidth}px)`);
+</script>
+</div>
+
+    
+
+</div>
+
+
+
+
+<div class="content-to-index">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>Configura la tua rete Azure in modo che i sistemi Cloud Volumes ONTAP possano funzionare correttamente.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requisiti-per-cloud-volumes-ontap">Requisiti per Cloud Volumes ONTAP</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>I seguenti requisiti di rete devono essere soddisfatti in Azure.</p>
+</div>
+<div class="sect2">
+<h3 id="accesso-a-internet-in-uscita">Accesso a Internet in uscita</h3>
+<div class="paragraph">
+<p>I nodi Cloud Volumes ONTAP richiedono l'accesso a Internet in uscita per NetApp AutoSupport, che monitora in modo proattivo lo stato di salute del sistema e invia messaggi al supporto tecnico NetApp.</p>
+</div>
+<div class="paragraph">
+<p>I criteri di routing e firewall devono consentire il traffico HTTP/HTTPS ai seguenti endpoint in modo che Cloud Volumes ONTAP possa inviare messaggi AutoSupport:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>https://support.netapp.com/aods/asupmessage</p>
+</li>
+<li>
+<p>https://support.netapp.com/asupprod/post/1.0/postAsup</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Se non è disponibile una connessione Internet in uscita per l'invio di messaggi AutoSupport, BlueXP configura automaticamente i sistemi Cloud Volumes ONTAP in modo che utilizzino il connettore come server proxy. L'unico requisito è garantire che il gruppo di sicurezza del connettore consenta connessioni <em>inbound</em> sulla porta 3128. Dopo aver implementato il connettore, aprire questa porta.</p>
+</div>
+<div class="paragraph">
+<p>Se sono state definite rigide regole in uscita per Cloud Volumes ONTAP, è necessario anche assicurarsi che il gruppo di sicurezza Cloud Volumes ONTAP consenta connessioni <em>in uscita</em> sulla porta 3128.</p>
+</div>
+<div class="paragraph">
+<p>Dopo aver verificato che l'accesso a Internet in uscita è disponibile, è possibile testare AutoSupport per assicurarsi che sia in grado di inviare messaggi. Per istruzioni, fare riferimento a. <a href="https://docs.netapp.com/us-en/ontap/system-admin/setup-autosupport-task.html" target="_blank" rel="noopener">"Documenti ONTAP: Configurazione di AutoSupport"</a>.</p>
+</div>
+<div class="paragraph">
+<p>Se BlueXP notifica che non è possibile inviare messaggi AutoSupport, <a href="task-verify-autosupport.html#troubleshoot-your-autosupport-configuration">"Risolvere i problemi della configurazione AutoSupport"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="indirizzi-ip">Indirizzi IP</h3>
+<div class="paragraph">
+<p>BlueXP assegna automaticamente il numero richiesto di indirizzi IP privati a Cloud Volumes ONTAP in Azure. È necessario assicurarsi che la rete disponga di un numero sufficiente di indirizzi IP privati.</p>
+</div>
+<div class="paragraph">
+<p>Il numero di LIF allocati da BlueXP per Cloud Volumes ONTAP dipende dalla distribuzione di un sistema a nodo singolo o di una coppia ha. LIF è un indirizzo IP associato a una porta fisica. Per strumenti di gestione come SnapCenter è necessaria una LIF di gestione SVM.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+Un LIF iSCSI fornisce l'accesso client sul protocollo iSCSI e viene utilizzato dal sistema per altri importanti flussi di lavoro di rete. Questi LIF sono obbligatori e non devono essere cancellati.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="indirizzi-ip-per-un-sistema-a-nodo-singolo">Indirizzi IP per un sistema a nodo singolo</h4>
+<div class="paragraph">
+<p>BlueXP assegna 5 o 6 indirizzi IP a un sistema a nodo singolo:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP di gestione del cluster</p>
+</li>
+<li>
+<p>IP di gestione dei nodi</p>
+</li>
+<li>
+<p>IP di intercluster per SnapMirror</p>
+</li>
+<li>
+<p>IP NFS/CIFS</p>
+</li>
+<li>
+<p>IP iSCSI</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+L'IP iSCSI fornisce l'accesso del client sul protocollo iSCSI. Viene inoltre utilizzato dal sistema per altri importanti flussi di lavoro di rete. Questa LIF è obbligatoria e non deve essere eliminata.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Gestione SVM (opzionale - non configurata per impostazione predefinita)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="indirizzi-ip-per-coppie-ha">Indirizzi IP per coppie ha</h4>
+<div class="paragraph">
+<p>BlueXP assegna gli indirizzi IP a 4 NIC (per nodo) durante l'implementazione.</p>
+</div>
+<div class="paragraph">
+<p>Si noti che BlueXP crea una LIF di gestione SVM sulle coppie ha, ma non sui sistemi a nodo singolo in Azure.</p>
+</div>
+<div class="paragraph">
+<p><strong>NIC0</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP di gestione dei nodi</p>
+</li>
+<li>
+<p>Intercluster IP</p>
+</li>
+<li>
+<p>IP iSCSI</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+L'IP iSCSI fornisce l'accesso del client sul protocollo iSCSI. Viene inoltre utilizzato dal sistema per altri importanti flussi di lavoro di rete. Questa LIF è obbligatoria e non deve essere eliminata.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>NIC1</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP della rete del cluster</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>NIC2</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cluster Interconnect IP (IC ha)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>NIC3</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP NIC Pageblob (accesso al disco)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+NIC3 è applicabile solo alle implementazioni ha che utilizzano lo storage page blob.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Gli indirizzi IP sopra indicati non migrano in caso di eventi di failover.</p>
+</div>
+<div class="paragraph">
+<p>Inoltre, 4 IP front-end (FIPS) sono configurati per la migrazione in caso di eventi di failover. Questi IP di frontend risiedono nel bilanciamento del carico.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IP di gestione del cluster</p>
+</li>
+<li>
+<p>IP dati NodeA (NFS/CIFS)</p>
+</li>
+<li>
+<p>IP dati NodeB (NFS/CIFS)</p>
+</li>
+<li>
+<p>IP di gestione SVM</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="connessioni-sicure-ai-servizi-azure">Connessioni sicure ai servizi Azure</h3>
+<div class="paragraph">
+<p>Per impostazione predefinita, BlueXP attiva un collegamento privato Azure per le connessioni tra gli account di storage blob di pagina Cloud Volumes ONTAP e Azure.</p>
+</div>
+<div class="paragraph">
+<p>Nella maggior parte dei casi, non c'è nulla da fare: BlueXP gestisce Azure Private link per te. Tuttavia, se si utilizza Azure Private DNS, sarà necessario modificare un file di configurazione. È inoltre necessario conoscere un requisito per la posizione del connettore in Azure.</p>
+</div>
+<div class="paragraph">
+<p>È inoltre possibile disattivare la connessione Private link, se richiesto dalle esigenze aziendali. Se si disattiva il collegamento, BlueXP configura Cloud Volumes ONTAP in modo che utilizzi un endpoint del servizio.</p>
+</div>
+<div class="paragraph">
+<p><a href="task-enabling-private-link.html">"Scopri di più sull'utilizzo di link privati o endpoint di servizio Azure con Cloud Volumes ONTAP"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="connessioni-ad-altri-sistemi-ontap">Connessioni ad altri sistemi ONTAP</h3>
+<div class="paragraph">
+<p>Per replicare i dati tra un sistema Cloud Volumes ONTAP in Azure e i sistemi ONTAP in altre reti, è necessario disporre di una connessione VPN tra Azure VNET e l'altra rete, ad esempio la rete aziendale.</p>
+</div>
+<div class="paragraph">
+<p>Per istruzioni, fare riferimento a. <a href="https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal" target="_blank" rel="noopener">"Documentazione di Microsoft Azure: Crea una connessione Site-to-Site nel portale Azure"</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="porta-per-linterconnessione-ha">Porta per l'interconnessione ha</h3>
+<div class="paragraph">
+<p>Una coppia Cloud Volumes ONTAP ha include un'interconnessione ha, che consente a ciascun nodo di controllare continuamente se il proprio partner funziona e di eseguire il mirroring dei dati di log per la memoria non volatile dell'altro. L'interconnessione ha utilizza la porta TCP 10006 per la comunicazione.</p>
+</div>
+<div class="paragraph">
+<p>Per impostazione predefinita, la comunicazione tra le LIF di interconnessione ha è aperta e non esistono regole di gruppo di sicurezza per questa porta. Tuttavia, se si crea un firewall tra le LIF di interconnessione ha, è necessario assicurarsi che il traffico TCP sia aperto per la porta 10006 in modo che la coppia ha possa funzionare correttamente.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="solo-una-coppia-ha-in-un-gruppo-di-risorse-azure">Solo una coppia ha in un gruppo di risorse Azure</h3>
+<div class="paragraph">
+<p>È necessario utilizzare un gruppo di risorse <em>dedicato</em> per ogni coppia di Cloud Volumes ONTAP ha implementata in Azure. In un gruppo di risorse è supportata una sola coppia ha.</p>
+</div>
+<div class="paragraph">
+<p>BlueXP presenta problemi di connessione se si tenta di implementare una seconda coppia Cloud Volumes ONTAP ha in un gruppo di risorse Azure.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="regole-del-gruppo-di-sicurezza">Regole del gruppo di sicurezza</h3>
+<div class="paragraph">
+<p>BlueXP crea gruppi di sicurezza Azure che includono le regole in entrata e in uscita di cui Cloud Volumes ONTAP ha bisogno per funzionare correttamente. È possibile fare riferimento alle porte a scopo di test o se si preferisce utilizzare i propri gruppi di protezione.</p>
+</div>
+<div class="paragraph">
+<p>Il gruppo di sicurezza per Cloud Volumes ONTAP richiede regole sia in entrata che in uscita.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/tip.svg" alt="Suggerimento">
+</td>
+<td class="content">
+Cerchi informazioni sul connettore? <a href="https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-azure.html" target="_blank" rel="noopener">"Visualizzare le regole del gruppo di protezione per il connettore"</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="regole-in-entrata-per-sistemi-a-nodo-singolo">Regole in entrata per sistemi a nodo singolo</h4>
+<div class="paragraph">
+<p>Quando si crea un ambiente di lavoro e si sceglie un gruppo di protezione predefinito, è possibile scegliere di consentire il traffico all'interno di una delle seguenti opzioni:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Selezionato solo VNET</strong>: L'origine del traffico in entrata è l'intervallo di sottorete di VNET per il sistema Cloud Volumes ONTAP e l'intervallo di sottorete di VNET in cui si trova il connettore. Questa è l'opzione consigliata.</p>
+</li>
+<li>
+<p><strong>Tutti i VNets</strong>: L'origine del traffico in entrata è l'intervallo IP 0.0.0.0/0.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Priorità e nome</th>
+<th class="tableblock halign-left valign-top">Porta e protocollo</th>
+<th class="tableblock halign-left valign-top">Origine e destinazione</th>
+<th class="tableblock halign-left valign-top">Descrizione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1000<br>
+inbound_ssh</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">22<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesso SSH all'indirizzo IP della LIF di gestione del cluster o di una LIF di gestione dei nodi</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1001<br>
+inbound_http</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesso HTTP alla console Web di System Manager utilizzando l'indirizzo IP della LIF di gestione del cluster</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1002<br>
+inbound_111_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">111<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chiamata a procedura remota per NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1003<br>
+inbound_111_udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">111<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chiamata a procedura remota per NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1004<br>
+inbound_139</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">139<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sessione del servizio NetBIOS per CIFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1005<br>
+inbound_161-162 _tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161-162<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Protocollo di gestione di rete semplice</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1006<br>
+inbound_161-162 _udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161-162<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Protocollo di gestione di rete semplice</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1007<br>
+inbound_443</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">443<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connettività con il connettore e accesso HTTPS alla console Web di System Manager utilizzando l'indirizzo IP della LIF di gestione del cluster</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1008<br>
+inbound_445</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">445<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft SMB/CIFS su TCP con frame NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1009<br>
+inbound_635_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">635<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Montaggio NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1010<br>
+inbound_635_udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">635<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Montaggio NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1011<br>
+inbound_749</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">749<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kerberos</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1012<br>
+inbound_2049_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2049<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Daemon del server NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1013<br>
+inbound_2049_udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2049<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Daemon del server NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1014<br>
+inbound_3260</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3260<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesso iSCSI tramite LIF dei dati iSCSI</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1015<br>
+inbound_4045-4046_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4045-4046<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NFS lock daemon e network status monitor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1016<br>
+inbound_4045-4046_udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4045-4046<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NFS lock daemon e network status monitor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1017<br>
+inbound_10000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10000<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Backup con NDMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1018<br>
+inbound_11104-11105</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11104-11105<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trasferimento dei dati SnapMirror</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000<br>
+inbound_deny _all_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blocca tutto il traffico TCP in entrata</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3001<br>
+inbound_deny _all_udp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bloccare tutto l'altro traffico UDP in entrata</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65000<br>
+AllowVnetInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Da VirtualNetwork a VirtualNetwork</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Traffico in entrata dall'interno di VNET</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65001<br>
+AllowAzureLoad BalancerInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AzureLoadBalancer a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Traffico di dati dal bilanciamento del carico standard di Azure</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65500<br>
+DenyAllInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bloccare tutto il traffico in entrata</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="regole-in-entrata-per-i-sistemi-ha">Regole in entrata per i sistemi ha</h4>
+<div class="paragraph">
+<p>Quando si crea un ambiente di lavoro e si sceglie un gruppo di protezione predefinito, è possibile scegliere di consentire il traffico all'interno di una delle seguenti opzioni:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Selezionato solo VNET</strong>: L'origine del traffico in entrata è l'intervallo di sottorete di VNET per il sistema Cloud Volumes ONTAP e l'intervallo di sottorete di VNET in cui si trova il connettore. Questa è l'opzione consigliata.</p>
+</li>
+<li>
+<p><strong>Tutti i VNets</strong>: L'origine del traffico in entrata è l'intervallo IP 0.0.0.0/0.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+I sistemi HA hanno meno regole in entrata rispetto ai sistemi a nodo singolo perché il traffico dati in entrata passa attraverso il bilanciamento del carico standard di Azure. Per questo motivo, il traffico proveniente dal bilanciamento del carico deve essere aperto, come mostrato nella regola "AllowAzureLoadBalancerInBound".
+</td>
+</tr>
+</table>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Priorità e nome</th>
+<th class="tableblock halign-left valign-top">Porta e protocollo</th>
+<th class="tableblock halign-left valign-top">Origine e destinazione</th>
+<th class="tableblock halign-left valign-top">Descrizione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100<br>
+inbound_443</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">443<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connettività con il connettore e accesso HTTPS alla console Web di System Manager utilizzando l'indirizzo IP della LIF di gestione del cluster</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">101<br>
+inbound_111_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">111<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chiamata a procedura remota per NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">102<br>
+inbound_2049_tcp</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2049<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Daemon del server NFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">111<br>
+inbound_ssh</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">22<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accesso SSH all'indirizzo IP della LIF di gestione del cluster o di una LIF di gestione dei nodi</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">121<br>
+inbound_53</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">53<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS e CIFS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65000<br>
+AllowVnetInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Da VirtualNetwork a VirtualNetwork</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Traffico in entrata dall'interno di VNET</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65001<br>
+AllowAzureLoad BalancerInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AzureLoadBalancer a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Traffico di dati dal bilanciamento del carico standard di Azure</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">65500<br>
+DenyAllInBound</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi porta<br>
+Qualsiasi protocollo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Qualsiasi a qualsiasi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bloccare tutto il traffico in entrata</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="regole-in-uscita">Regole in uscita</h4>
+<div class="paragraph">
+<p>Il gruppo di protezione predefinito per Cloud Volumes ONTAP apre tutto il traffico in uscita. Se questo è accettabile, attenersi alle regole di base per le chiamate in uscita. Se sono necessarie regole più rigide, utilizzare le regole avanzate in uscita.</p>
+</div>
+<div class="sect4">
+<h5 id="regole-di-base-in-uscita">Regole di base in uscita</h5>
+<div class="paragraph">
+<p>Il gruppo di protezione predefinito per Cloud Volumes ONTAP include le seguenti regole in uscita.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Porta</th>
+<th class="tableblock halign-left valign-top">Protocollo</th>
+<th class="tableblock halign-left valign-top">Scopo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutti i TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutto il traffico in uscita</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutti gli UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tutto il traffico in uscita</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="regole-avanzate-in-uscita">Regole avanzate in uscita</h5>
+<div class="paragraph">
+<p>Se sono necessarie regole rigide per il traffico in uscita, è possibile utilizzare le seguenti informazioni per aprire solo le porte richieste per le comunicazioni in uscita da Cloud Volumes ONTAP.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/test/images/note.svg" alt="Nota">
+</td>
+<td class="content">
+L'origine è l'interfaccia (indirizzo IP) del sistema Cloud Volumes ONTAP.
+</td>
+</tr>
+</table>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 10%;">
+<col style="width: 6%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 34%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Servizio</th>
+<th class="tableblock halign-left valign-top">Porta</th>
+<th class="tableblock halign-left valign-top">Protocollo</th>
+<th class="tableblock halign-left valign-top">Origine</th>
+<th class="tableblock halign-left valign-top">Destinazione</th>
+<th class="tableblock halign-left valign-top">Scopo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="18"><p class="tableblock">Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">88</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Autenticazione Kerberos V.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">137</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Servizio nomi NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">138</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Servizio datagramma NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">139</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sessione del servizio NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">389</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP E UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LDAP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">445</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft SMB/CIFS su TCP con frame NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">464</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kerberos V change &amp; set password (SET_CHANGE)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">464</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amministrazione delle chiavi Kerberos</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">749</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kerberos V change &amp; set Password (RPCSEC_GSS)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">88</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data LIF (NFS, CIFS, iSCSI)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Autenticazione Kerberos V.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">137</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Servizio nomi NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">138</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Servizio datagramma NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">139</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sessione del servizio NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">389</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP E UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LDAP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">445</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft SMB/CIFS su TCP con frame NetBIOS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">464</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kerberos V change &amp; set password (SET_CHANGE)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">464</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Amministrazione delle chiavi Kerberos</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">749</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF DATI (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Insieme di strutture di Active Directory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kerberos V change &amp; set password (RPCSEC_GSS)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">AutoSupport</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTPS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">443</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">support.netapp.com</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AutoSupport (HTTPS è l'impostazione predefinita)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">support.netapp.com</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AutoSupport (solo se il protocollo di trasporto viene modificato da HTTPS a HTTP)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3128</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Connettore</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invio di messaggi AutoSupport tramite un server proxy sul connettore, se non è disponibile una connessione Internet in uscita</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Backup della configurazione</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\Http://&lt;connector-IP-address&gt;/occm/offboxconfig</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Inviare i backup della configurazione al connettore. <a href="https://docs.netapp.com/us-en/ontap/system-admin/node-cluster-config-backed-up-automatically-concept.html" target="_blank" rel="noopener">"Informazioni sui file di backup della configurazione"</a>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DHCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">68</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DHCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client DHCP per la prima installazione</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DHCPS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">67</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DHCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DHCP server (Server DHCP)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">53</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi e LIF dei dati (NFS, CIFS)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NDMP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">18600–18699</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Server di destinazione</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Copia NDMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SMTP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Server di posta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gli avvisi SMTP possono essere utilizzati per AutoSupport</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="4"><p class="tableblock">SNMP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitorare il server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoraggio mediante trap SNMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitorare il server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoraggio mediante trap SNMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">162</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitorare il server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoraggio mediante trap SNMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">162</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitorare il server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoraggio mediante trap SNMP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">SnapMirror</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11104</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF intercluster</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ONTAP Intercluster LIF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gestione delle sessioni di comunicazione tra cluster per SnapMirror</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11105</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TCP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF intercluster</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ONTAP Intercluster LIF</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trasferimento dei dati SnapMirror</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Syslog</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">514</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UDP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LIF di gestione dei nodi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Server syslog</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Messaggi di inoltro syslog</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requisiti-per-il-connettore">Requisiti per il connettore</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Se non hai ancora creato un connettore, dovresti rivedere anche i requisiti di rete per il connettore.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://docs.netapp.com/us-en/bluexp-setup-admin/task-quick-start-connector-azure.html" target="_blank" rel="noopener">"Visualizzare i requisiti di rete per il connettore"</a></p>
+</li>
+<li>
+<p><a href="https://docs.netapp.com/us-en/bluexp-setup-admin/reference-ports-azure.html" target="_blank" rel="noopener">"Regole del gruppo di sicurezza in Azure"</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+    </article>
+    <!-- Page Container -->
+  </div>
+
+  
+  <!-- Start Page Toolbar -->
+<div id="ie-right-navbar-collapse" class="close">
+  <img id="navbar-expand" class="ie-searchbox-icon" src="/it-it/test/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-right-navbar" class="open">
+  <div id="right-navbar-collapse">
+    <img src="/it-it/test/images/double_arrow.svg" alt="" />
+  </div>
+  <div class="page-nav-container">
+    <nav class="page-nav-fixed">
+      <div class="page-nav-title">In questa pagina</div>
+      <div class="page-nav-links">
+        <ul class="page-nav-inner" id="page-menu"></ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<script>
+  resizeContent();
+  function setRightBarHeight() {
+    var h = 0;
+
+    // header 1
+    h += PXinViewport($('.n-footer'));
+    h += PXinViewport($('#ie-new-header'));
+
+    if ($('#ie-right-navbar').length) {
+      $('#ie-right-navbar').css({ height: `calc(100vh - ${h}px)` });
+    }
+    if ($('.page-nav-links').length) {
+      h += 98;
+      $('.page-nav-links').css({ height: `calc(100vh - ${h}px)` });
+    }
+  }
+
+  $(document).ready(function () {
+    // PAGE NAV - Click
+    const MASTHEAD_OFFSET = 65;
+    const SECTIONS = $("main h2, main h3");
+    let calculateActiveSection = false;
+    setTimeout(() => {
+      calculateActiveSection = true;
+    }, 100)
+
+    $(".page-nav__link").click(function (event) {
+      calculateActiveSection = false;
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      var target = $(event.target);
+      target.addClass('page-nav__link--active');
+      location.hash = event.target.hash;
+      setTimeout(() => {
+        calculateActiveSection = true;
+      }, 100)
+
+    });
+
+    // PAGE NAV - Scroll
+    $(window).on('resize scroll', function () {
+      if (calculateActiveSection) {
+        var activeSection = getActiveSection(SECTIONS, MASTHEAD_OFFSET);
+        if (activeSection) {
+          var activeHref = $(activeSection).attr('id');
+          $(".page-nav__link").removeClass('page-nav__link--active');
+          $("#page-menu a[href=#" + activeHref + "]").addClass('page-nav__link--active');
+          if (location.hash != "#" + activeHref) {
+            if (history.replaceState) {
+              history.replaceState(null, null, "#" + activeHref);
+            }
+          }
+        }
+      }
+    });
+
+    $(".n-pdf-button").click(function () {
+      $(this).toggleClass("active");
+    });
+
+    $.fn.isVisibleAndInViewport = function () {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      return elementBottom > viewportTop && elementTop < viewportBottom && $(this).is(":visible");
+    };
+
+
+    $(window).on('resize scroll', function () {
+      setRightBarHeight();
+    });
+
+    $(window).trigger('resize');
+
+
+  });
+
+  $("#right-navbar-collapse").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 350, function () {
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+    });
+    $(".ie-content-pane").animate({ width: (width + rightNavbarWidth) }, 350, function () {
+      resizeContent()
+      setSidebarBottom();
+    })
+
+  });
+  $("#navbar-expand").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 250, function () {
+      $("#ie-right-navbar-collapse").removeClass("open")
+      $("#ie-right-navbar-collapse").addClass("close")
+      $("#ie-right-navbar").removeClass("close")
+      $("#ie-right-navbar").addClass("open")
+      setRightBarHeight();
+      setSidebarBottom();
+    });
+    $(".ie-content-pane").animate({ width: (width - rightNavbarWidth) }, 250, function () {
+      resizeContent()
+    })
+  });
+
+  function navbarResize() {
+    const rightNavbarResized = $("#ie-right-navbar-collapse").hasClass('resized');
+    if (window.innerWidth < 1024) {
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+      $("#ie-right-navbar").removeAttr("style")
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar-collapse").addClass("resized")
+    } else {
+      if (rightNavbarResized) {
+        $('#ie-right-navbar').removeClass('close');
+        $('#ie-right-navbar').addClass('open');
+        $("#ie-right-navbar-collapse").removeClass("resized")
+        $("#ie-right-navbar-collapse").removeClass("open")
+        $("#ie-right-navbar-collapse").addClass("close")
+      }
+    }
+    resizeContent()
+  }
+  navbarResize();
+  $(window).on('resize load', function () {
+    navbarResize()
+  });
+
+  function getActiveSection(sections, offset) {
+    var scrollPosition = $(window).scrollTop() + offset + 5;
+    var activeSection;
+    for (var i = 0; i < sections.length; i++) {
+      var el = $(sections[i]);
+      var activePosition = el.offset().top;
+      if (activePosition > scrollPosition) {
+        break;
+      }
+
+      activeSection = sections[i];
+    }
+
+    return activeSection;
+  }
+
+  $("a[href*=#]:not([href=#])").click(function () {
+    setTimeout(() => {
+      $(window).trigger('scroll');
+    }, 105)
+  })
+
+  const hashOnLoad = location.href.split("#")[1];
+  setTimeout(function () {
+    if (hashOnLoad) {
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      $("#page-menu a[href=#" + hashOnLoad + "]").addClass('page-nav__link--active');
+    }
+  }, 100)
+
+</script>
+
+
+  <div style="clear: both"></div><!-- Main needs to have height --></div>
+
+        </main>
+
+        <footer class="n-footer">
+  <div class="n-footer__bottom">
+    <div class="n-container">
+        <div class="n-footer__left">
+          <li class="n-footer__copyright-link">
+                    <a href="https://www.netapp.com/company/legal/copyright/">© 2024 NetApp, Inc.</a>
+          </li>
+        </div>
+        <div class="n-footer__center">
+          <ul class="n-footer__copyright-list">
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/terms-of-use/">Condizioni per l'utilizzo</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/privacy-policy/">Direttiva sulla privacy</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/cookie-policy/">Direttiva sui cookie</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a class="ot-sdk-show-settings">Impostazioni cookie</a>
+            </li>
+          </ul>
+       </div>
+        <div class="n-footer__right">
+              <li class="n-footer__copyright-link">
+                <a target="_self" href="javascript:netapp_mailto()">Invia feedback su questa pagina</a>
+              </li>
+        </div>
+     </div>
+  </div>
+</footer>
+
+      </div><!-- Elasticsearch JS -->
+      <script type="text/javascript" src='/it-it/test/js/bundle.js'></script>
+
+      <!-- Syntax Highlighting -->
+      <script type="text/javascript" src='/it-it/test/js/prism.js'></script>
+      <script type="text/javascript" src='/it-it/test/js/prism-curl.js'></script>
+    </div>
+    <script>
+      document.body.offsetWidth=1903;
+      cookieLaw = {}
+      cookieLaw.euCountry = "US";
+      cookieLaw.invoke = function(){return false;}
+    </script>
+    <script src='/it-it/test/js/ie-tabbed-blocks.js'></script>
+    <script src='/it-it/test/js/ie-sidebar.js'></script>
+  </body>
+
+</html>
