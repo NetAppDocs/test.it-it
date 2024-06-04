@@ -14,7 +14,7 @@ summary: 'Il componente AutoSupport di ONTAP raccoglie la telemetria e la invia 
 
 
 [role="lead"]
-Il componente AutoSupport di ONTAP raccoglie la telemetria e la invia per l'analisi. Il consulente digitale Active IQ analizza i dati di AutoSupport e offre un'assistenza e un'ottimizzazione proattive. Utilizzando l'intelligenza artificiale, Active IQ è in grado di identificare i potenziali problemi e di risolverli prima che influiscano sul tuo business.
+Il componente AutoSupport di ONTAP raccoglie la telemetria e la invia per l'analisi. Il consulente digitale Active IQ analizza i dati di AutoSupport e offre un'assistenza e un'ottimizzazione proattive. Utilizzando l'intelligenza artificiale, Active IQ è in grado di identificare i potenziali problemi e di risolverli prima che influiscano sul tuo business. Modifica per il test di cutover.
 
 Modifica per la localizzazione.
 
